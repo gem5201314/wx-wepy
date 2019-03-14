@@ -1,0 +1,264 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .select-city-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+  .search-input {
+    width: 100%;
+    margin-top: 30rpx;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    box-sizing: border-box;
+    .input-view {
+      width: 100%;
+      height: 60rpx;
+      border-radius: 10rpx;
+      padding-left: 20rpx;
+      padding-right: 20rpx;
+      border: 1rpx solid $borderColor;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      font-size: 28rpx;
+      color: #a5a5a5;
+      position: relative;
+      box-sizing: border-box;
+      .icon {
+        width: 40rpx;
+        height: 40rpx;
+        margin-right: 30rpx;
+      }
+    }
+  }
+  .view-postion-fix {
+    position: fixed;
+    width: 750rpx;
+    height: 2000rpx;
+    left: 0;
+    top: 0;
+    background: rgba(21, 21, 23, 0.39);
+    box-sizing: border-box;
+    input {
+      color: #444444;
+    }
+    .view-postion {
+      position: absolute;
+      width: 100%;
+      max-height: 500rpx;
+      overflow-y: auto;
+      left: 0rpx;
+      top: 60rpx;
+      background: #ffffff;
+      font-size: 28rpx;
+      padding-left: 20rpx;
+      border-radius: 10rpx;
+      color: #444444;
+      box-sizing: border-box;
+      .show-list-item {
+        padding: 20rpx;
+        padding-left: 0;
+        border-bottom: 1px solid $borderColor;
+        box-sizing: border-box;
+      }
+    }
+  }
+  .auto-address {
+    width: 100%;
+    background: #fff;
+    margin-top: 30rpx;
+    padding: 20rpx;
+    .main {
+      display: flex;
+      align-items: center;
+      .img {
+        width: 30rpx;
+        height: 30rpx;
+        margin-right: 20rpx;
+      }
+      .text {
+        color: gray;
+        font-size: 28rpx;
+        text {
+          color: #444444;
+        }
+      }
+    }
+  }
+  .hot-city {
+    width: 100%;
+    background: #fff;
+    padding: 20rpx;
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    .item {
+      width: 25%;
+      font-size: 28rpx;
+      color: #444444;
+      text-align: center;
+      margin-top: 10rpx;
+      padding-right: 40rpx;
+      box-sizing: border-box;
+      .value {
+        background: #f7f7f7;
+        padding: 10rpx;
+        border-radius: 10rpx;
+      }
+    }
+  }
+  .city-list {
+    .top {
+      width: 100%;
+      font-size: 28rpx;
+      color: #8F8F94;
+      padding: 20rpx;
+      background: #F0F0F6;
+      box-sizing: border-box;
+    }
+    .list {
+      background: #ffffff;
+      font-size: 28rpx;
+      padding-left: 20rpx;
+      color: #444444;
+      box-sizing: border-box;
+      .list-item {
+        padding: 20rpx;
+        padding-left: 0;
+        border-bottom: 1px solid $borderColor;
+        box-sizing: border-box;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='select-city-index'>
+    <!-- 输入框检索 -->
+    <view class="search-input" @tap="inputAddress" wx:if="{{!showInput}}">
+      <view class="input-view">
+        <view class="icon">
+          <image src="{{_imgSearch}}"></image>
+        </view>
+        <view class="text">输入城市名称</view>
+      </view>
+    </view>
+    <!--输入框  -->
+    <view class="view-postion-fix" @tap="exitSelect" wx:if="{{showInput}}">
+      <view class="search-input">
+        <view class="input-view">
+          <input focus></input>
+          <view class="view-postion">
+            <view class="show-list-item" wx:for="{{findCityList}}" wx:key="{{index}}" @tap="selectCity({{item}})">{{item.name}}</view>
+            <!-- <view>暂无数据喔</view> -->
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 自动定位 -->
+    <view class="auto-address">
+      <view class="main">
+        <view class="img">
+          <image src="{{_imgAddress}}"></image>
+        </view>
+        <view class="text">当前定位：
+          <text class="value">{{currentSelectCity}}</text>
+        </view>
+      </view>
+    </view>
+    <!-- 热门城市 -->
+    <view class="city-list">
+      <view class="top">热门城市</view>
+      <view class="hot-city">
+        <view class="item" wx:for="{{hotCityList}}" wx:key="{{index}}">
+          <view class="value" @tap="selectCity({{item}})">{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+    <!-- 选择 -->
+    <view class="city-list" wx:for="ABCDEFGHIG" wx:key="{{index}}">
+      <view class="top">{{item}}</view>
+      <repeat for="{{findCityList}}" key="i" index="i" item="v">
+        <view class="list">
+          <view class="list-item" @tap="selectCity({{v}})">{{v.name}}</view>
+        </view>
+      </repeat>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import other from '@/mixins/other_api'
+  import userset from '@/mixins/user_seting'
+  export default class SelectCity extends wepy.page {
+    config = {
+      navigationBarTitleText: '选择城市'
+    }
+    components = {
+    }
+    data = {
+      showInput: false, // 是否显示输入检索框
+      currentSelectCity: '', // 当前选择的城市
+      hotCityList: [{
+        name: '上海'
+      },
+      {
+        name: '北京'
+      },
+      {
+        name: '深圳'
+      },
+      {
+        name: '广州'
+      },
+      {
+        name: '香港'
+      },
+      {
+        name: '成都'
+      }
+      ], // 热门城市列表
+      allCityList: [], // 所有城市列表，按字母
+      findCityList: [{
+        name: '上海'
+      },
+      {
+        name: '上沙'
+      }
+      ] // 检索出来的城市列表
+    }
+    mixins = [tool, router, userset, other]
+    methods = {
+      inputAddress() { // 输入框点击
+        this.showInput = true
+      },
+      exitSelect() { // 退出输入框选择，点击其他
+        this.showInput = false
+      },
+      selectCity(val) { // 选择城市
+        this.storageCity(val.name)
+      }
+    }
+      // 自动定位
+    async autoGetCity() {
+      let point = await this._userPower('位置')
+      let cityInfo = await this._coordinateToCity(point.latitude, point.longitude)
+      this.storageCity(cityInfo.city)
+    }
+    // 缓存城市
+    storageCity(city) {
+      wepy.setStorageSync('city', city)
+      this.currentSelectCity = city
+      this.$apply()
+    }
+    onLoad() {
+      this.autoGetCity()
+    }
+  }
+</script>

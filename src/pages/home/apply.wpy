@@ -1,0 +1,68 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.apply-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='apply-index'>
+      <Money :model="applyMoney" upText="请输入金额" downText="100~2000(万)" type='money' placeholder="金额"></Money>
+      <Date :model="applyDate" upText="请输入周期" downText="1个月~360个月" type='date' placeholder="周期"></Date>
+      
+      <FixButton text="立即申请" @submit.user="apply" xy="yes" :xyList="xyList"></FixButton>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import regForm from '@/mixins/reg_form'
+  import ApplrCard from '@/components/home_comm/apply_card'
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class Apply extends wepy.page {
+    config = {
+      navigationBarTitleText: '申请'
+    }
+    components = {
+      Money: ApplrCard,
+      Date: ApplrCard,
+      FixButton
+
+    }
+    data = {
+      applyMoney: '', // 申请金额
+      applyDate: '', // 申请周期
+      xyList: [ // 协议列表
+        {
+          name: '用户注册协议',
+          url: ''
+        },
+        {
+          name: '保密协议',
+          url: ''
+        }
+      ]
+    }
+    mixins = [tool, router, regForm]
+    methods = {
+      async apply() { // 申请提交
+        let data = {
+          money: this.applyMoney,
+          date: this.applyDate
+        }
+        let tip = new Map([
+          ['money', [ '请输入正确金额', '非空' ]],
+          ['date', ['请输入正确周期', '非空']]
+        ])
+        await this._formIsTrue(data, tip) // 验证
+        this._goRouter('/pages/home/apply_step')
+      }
+    }
+    onLoad() {}
+  }
+</script>

@@ -1,0 +1,149 @@
+<style lang="scss">
+// 全局样式
+page{
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: #ffffff;
+}
+image{
+  width: 100%;
+  height: 100%;
+  display:block;
+}
+</style>
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+// 引入store,且全局使用
+import configStore from './store'
+wepy.$store = configStore()
+export default class extends wepy.app {
+  config = {
+    permission: {
+      'scope.userLocation': {
+        'desc': '我们需要你的位置'
+      }
+    },
+    pages: [
+      'pages/home', // 首页
+      'pages/activity', // 活动
+      'pages/loan', // 贷款
+      'pages/find', // 发现
+      'pages/mine', // 我的
+      'pages/login', // 登录
+
+      // 其他路由
+      'pages/public_page/three_select_filter', // 三级下拉——第三级选择页面
+      'pages/public_page/select_city', // 选择城市
+      'pages/public_page/power_set', // 授权
+      // home
+      'pages/home/match_base', // 匹配 基础信息
+      'pages/home/match_aptitude', // 匹配 资质信息
+      'pages/home/match_ready', // 匹配 已经匹配
+      'pages/home/produce_info', // 产品详情
+      'pages/home/apply', // 申请
+      'pages/home/apply_step', // 申请步骤
+
+      // loan
+
+      // active
+      'pages/activity/activity_info', // 活动详情
+
+      // find
+      'pages/find/find_accumulation_fund', // 公积金查询
+      'pages/find/find_house_property', // 房产查询
+      'pages/find/find_social_security', // 社保金查询
+      'pages/find/find_taxation', // 税费查询
+      'pages/find/foreclosure_building', // 赎楼
+
+      // news
+      'pages/news/list', // 资讯列表
+      'pages/news/detail', // 资讯详情
+      'pages/news/comment', // 评论
+      // mine
+      'pages/mine/about', // 关于
+      'pages/mine/apply', // 我的申请
+      'pages/mine/approve', // 认证资料
+      'pages/mine/bank_card', // 银行卡
+      'pages/mine/collect', // 收藏
+      'pages/mine/invest', // 我的投资
+      'pages/mine/invite', // 邀请
+      'pages/mine/setting', // 设置
+      'pages/mine/wallet', // 钱包
+      'pages/mine/person_data', // 个人资料
+      // mine下的二级页面
+      'pages/mine_second_level/approve_user', // 身份认证
+      'pages/mine_second_level/approve_company', // 企业认证
+      'pages/mine_second_level/apply_info', // 申请详情
+      'pages/mine_second_level/detial', // 明细
+      'pages/mine_second_level/withdrawal' // 提现
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#A31896',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'white'
+    },
+
+    tabBar: {
+      selectedColor: '#008aff',
+      color: '#a5a5a5',
+      list: [
+        {
+          pagePath: 'pages/home',
+          text: '首页',
+          iconPath: '/image/tab/tab_ic_01home_n.png',
+          selectedIconPath: '/image/tab/tab_ic_01home_s.png'
+        },
+        {
+          pagePath: 'pages/loan',
+          text: '贷款',
+          iconPath: '/image/tab/tab_ic_02loans.png',
+          selectedIconPath: '/image/tab/tab_ic_02loans_s.png'
+        },
+        {
+          pagePath: 'pages/activity',
+          text: '活动',
+          iconPath: '/image/tab/tab_ic_03activity.png',
+          selectedIconPath: '/image/tab/tab_ic_03activity_s.png'
+        },
+        {
+          pagePath: 'pages/find',
+          text: '发现',
+          iconPath: '/image/tab/tab_ic_04service.png',
+          selectedIconPath: '/image/tab/tab_ic_04service_s.png'
+        },
+        {
+          pagePath: 'pages/mine',
+          text: '我的',
+          iconPath: '/image/tab/tab_ic_05mine.png',
+          selectedIconPath: '/image/tab/tab_ic_05mine_s.png'
+        }
+      ]
+    }
+  }
+
+  globalData = {
+    globalTest: '全局变量'
+  }
+
+  constructor () {
+    super()
+    this.use('promisify')
+    this.use('requestfix')
+  }
+
+  onLaunch() {
+    this.setConfig()
+  }
+  // 项目配置
+  setConfig() {
+    this.globalData = {
+      ...this.globalData,
+      ...wepy.$appConfig.configData
+    }
+  }
+}
+</script>

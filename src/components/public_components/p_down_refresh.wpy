@@ -1,0 +1,89 @@
+<style lang='scss' scoped>
+@import '../../scss/common'; 
+.down-refresh-index{
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+.icon{
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 20000;
+}
+</style>
+
+<template>
+  <view class='down-refresh-index'>
+      <view class="mine-refresh"
+        @touchstart="touchstartMine"
+        @touchmove="touchmoveMine"
+        @touchend="touchendMine"
+        class="refresh-main"
+        >
+        <view class="icon">
+          
+        </view>
+         <slot></slot>
+      </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Tips from '@/utils/Tips'
+  export default class DownRefresh extends wepy.component {
+    components = {}
+    data = {
+      startX: '', // 开始点
+      startY: '',
+
+      endX: '', // 结束点
+      endY: '',
+
+      isTop: 0, // 是否到顶部
+      configData: 150 // 配置值，调节此值可调节下拉手感
+    }
+    mixins = [tool, router]
+    methods = {
+      // 手机触摸开始
+      touchstartMine(e) {
+        this.startX = e.changedTouches[0].pageX
+        this.startY = e.changedTouches[0].pageY
+      },
+      // 触摸后移动
+      touchmoveMine(e) {
+        this.endX = e.changedTouches[0].pageX
+        this.endY = e.changedTouches[0].pageY
+        this.isGetDownRefreshMe()
+      },
+      // 触摸动作结束
+      touchendMine(e) {
+        this.endX = e.changedTouches[0].pageX
+        this.endY = e.changedTouches[0].pageY
+        this.isGetDownRefreshMe()
+      }
+    }
+    // 用户动作是否满足下拉判断
+    isGetDownRefreshMe() {
+      let scroll = this.endY - this.startY
+      if (scroll > this.configData && this._scrollTop === 0) {
+        this.$emit('downRefresh', '下拉刷新')
+        this.downRefreshMe()
+        setTimeout(() => {
+          this.endFreshMe()
+        }, 5000)
+      }
+    }
+    // 下拉刷新函数
+    downRefreshMe() {
+      Tips.loading('正在刷新')
+    }
+    // 结束下拉
+    endFreshMe() {
+      Tips.loaded()
+    }
+    onLoad() {}
+  }
+</script>

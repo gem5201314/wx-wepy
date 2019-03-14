@@ -1,0 +1,49 @@
+<style lang="scss" scoped>
+  @import '../../scss/common';
+  // 
+  .news-detail-page{
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .news-content{
+    padding-bottom: 200rpx;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <view class="news-detail-page">
+    <!-- 引入富文本样式 -->
+    <import src="../../components/wxparse/wxParse.wxml" />
+     活动--->
+    <view class="news-content">
+        <Html2wxml :parserContent.sync="productDesc"></Html2wxml>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Html2wxml from '@/components/wxparse/html2wxml'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class NewsDetailPage extends wepy.page {
+    config = {
+      navigationBarTitleText: '活动详情'
+    }
+    components={
+      Html2wxml
+    }
+    data = {
+      newInfo: '',
+      productDesc: '<p style="color:red">富文本</p>'
+    }
+    mixins = [tool, router]
+    methods = {}
+
+    onLoad() {
+      this._richTextCall()
+    }
+  }
+</script>

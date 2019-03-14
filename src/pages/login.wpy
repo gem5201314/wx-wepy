@@ -1,0 +1,98 @@
+
+<style lang="scss" scoped>
+@import '../scss/common';
+  .index {
+    width: 100%;
+    height: auto;
+  }
+  .content {
+    // border: 1px solid red;
+    box-sizing: border-box;
+    .head-logo {
+      height: 500rpx;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center; // border: 1px solid green;
+      .img {
+        width: 200rpx;
+        height: 200rpx;
+        border-radius: 200rpx; // border: 1px solid red;
+        overflow: hidden;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .title {
+        font-size: 48rpx;
+        margin-top: 20rpx;
+        text-align: center; // border: 1px solid red; 
+      }
+    }
+    .text {
+      // border:1px solid purple;
+      padding-left: 40rpx;
+      padding-right: 40rpx;
+      font-size: 34rpx;
+      box-sizing: border-box;
+    }
+    .button {
+      padding: 40rpx; // border: 1px solid yellow;
+      box-sizing: border-box;
+      #butt {
+        background: $mainColor;
+      }
+    }
+  }
+  .two-text {
+    color: #999999;
+  }
+</style>
+
+<template lang="wxml">
+  <view class="index">
+    <view class="content">
+      <view class="head-logo">
+        <view>
+          <view class="img">
+            <image src="{{_img1}}"></image>
+          </view>
+          <view class="title">容易童</view>
+        </view>
+      </view>
+      <view class="text">
+        <view>请同意微信授权</view>
+        <view class="two-text">以便我们为您提供更好的服务</view>
+      </view>
+      <view class="button">
+        <button id="butt" open-type="getUserInfo" type="primary" lang="zh_CN" @getuserinfo="onGotUserInfo">授权</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class Login extends wepy.page {
+    config = {
+      navigationBarTitleText: '授权'
+    }
+    components = {
+    };
+    data = {};
+    methods = {
+      onGotUserInfo(res) {
+        console.log('-----------^^^^^------------邓紫棋', res)
+        this._goRouter('/pages/home', '', 'tab')
+      }
+    }
+    mixins = [tool, router]
+    events = {};
+    onLoad() {
+  
+    }
+  }
+</script>

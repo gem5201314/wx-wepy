@@ -1,0 +1,171 @@
+<style lang='scss' scoped>
+  @import '../scss/common';
+  .home-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+    .classfy {
+      width: 100%;
+      padding: 20rpx;
+      background: #fff;
+      box-sizing: border-box;
+    }
+
+    .mate{
+      width: 100%;
+      height: 170rpx;
+      box-sizing: border-box;
+      background: #fff;
+      padding-left: 20rpx;
+      padding-right: 20rpx;
+      margin-top: 30rpx;
+      .mate-main{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .left-div{
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            .left-icon{
+              width: 110rpx;
+              height: 110rpx;
+              border-radius: 110rpx;
+              overflow: hidden;
+            }
+            .right-text{
+              flex: 1;
+              padding-left: 30rpx;
+              box-sizing: border-box;
+              .how-money{
+                font-size: 24rpx;
+                color: #444444;
+              }
+              .money{
+                font-size: 58rpx;
+                color: $mainColor;
+              }
+            }
+        }
+        .right{
+          width: 200rpx;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          box-sizing: border-box;
+          .button{
+            width: 160rpx;
+            height: 60rpx;
+            border-radius: 10rpx;
+            text-align: center;
+            line-height: 60rpx;
+            background: $mainColor;
+            font-size: 24rpx;
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .recommend{
+      margin-top: 30rpx;
+    }
+  }
+</style>
+
+<template>
+  <view class='home-index'>
+    <!-- 自定义头部 -->
+   <TopCustom :city.sync="city" pageName="融客天下"></TopCustom>
+    <!-- 轮播 -->
+    <Carousel :list="listImg" imgHttp=''></Carousel>
+    <!-- 分类 -->
+    <view class="classfy">
+      <Classfy></Classfy>
+    </view>
+    <!-- 智能匹配 -->
+    <view class="mate">
+      <view class="mate-main">
+        <view class="left-div">
+          <view class="left-icon">
+            <image src="{{_img1}}"></image>
+          </view>
+          <view class="right-text">
+            <view class="how-money">我的额度</view>
+            <view class="money">500000</view>
+          </view>
+        </view>
+        <view class="right" @tap="goMatch">
+          <view class="button">智能匹配</view>
+        </view>
+      </view>
+    </view>
+    <!-- 推荐产品 -->
+    <view class="recommend">
+        <LeftTitle title="推荐产品" navText="查看全部">
+            <List></List>
+        </LeftTitle>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Carousel from '@/components/public_components/p_carousel' // 轮播
+  import LeftTitle from '@/components/public_components/p_left_title' // 分类条
+  import TopCustom from '@/components/public_components/p_top_custom' // 头部自定义
+  import Classfy from '@/components/home_comm/home_classfy' // 分类
+  import List from '@/components/home_comm/home_list'// 列表
+  export default class Home extends wepy.page {
+    config = {
+      navigationStyle: 'custom'
+    }
+    components = {
+      TopCustom,
+      Carousel,
+      Classfy,
+      LeftTitle,
+      List
+    }
+    data = {
+      listImg: [
+        {
+          img: 'http://static.laoganbu.cn/409b70ba066d302ac050051629b6014a4253ed3e.jpg'
+        },
+        {
+          img: 'http://static.laoganbu.cn/409b70ba066d302ac050051629b6014a4253ed3e.jpg'
+        },
+        {
+          img: 'http://static.laoganbu.cn/409b70ba066d302ac050051629b6014a4253ed3e.jpg'
+        },
+        {
+          img: 'http://static.laoganbu.cn/409b70ba066d302ac050051629b6014a4253ed3e.jpg'
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      //
+      goMatch() {
+        this._goRouter('/pages/home/match_base')
+      }
+    }
+    computed={
+      city() {
+        return wepy.getStorageSync('city')
+      }
+    }
+    onLoad() {
+  
+    }
+}
+</script>

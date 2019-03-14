@@ -1,0 +1,125 @@
+<style lang="scss" scoped>
+  .input-auto {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 100rpx;
+    background-color: rgba(1, 1, 1, 0.5);
+    color: #444444; // border: 1px solid red;
+    box-sizing: border-box;
+    .input {
+      display: flex;
+      position: absolute;
+      justify-content: space-between;
+      align-items: center;
+      height: 370rpx;
+      width: 100%;
+      padding: 30rpx;
+      background: #fff;
+      box-sizing: border-box;
+      .textarea {
+        flex: 1;
+        width: 500rpx;
+      }
+      .min-button {
+        display: flex;
+        height: 100%;
+        justify-content: flex-end;
+        align-items: flex-end;
+        font-size: 24rpx;
+        .ok {
+          padding: 10rpx;
+          padding-left: 20rpx;
+          padding-right: 20rpx;
+          color: #fff;
+          border-radius: 10rpx;
+          background: #06a0ff;
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view>
+    <!-- 输入框 -->
+    <view class="input-auto" hidden="{{hide}}">
+      <view class="input" style="bottom:{{keyHeight}}px">
+        <view class="textarea" >
+          <textarea value="{{commData}}" cursor-spacing="{{keybordHeight}}rpx" show-confirm-bar='{{showConfirm}}' maxlength="500" placeholder="请输入您的评论哦~（限500字）" focus="{{!hide}}" @input="bindinput" @linechange="bindlinechange" @blur="blurChange" @focus="bindfocus"></textarea>
+        </view>
+        <view class="min-button">
+          <view class="ok" @tap="publish">发表</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class CommInput extends wepy.component {
+    props = {
+      hide: {
+        default: true,
+        twoWay: true
+      }
+    }
+    data = {
+      commData: '', // 输入内容
+      keybordHeight: 0, // 光标离键盘
+      keyHeight: 297, // 键盘高度
+      animationData: {} // 动画
+    }
+    mixins = [tool, router]
+    methods = {
+      bindinput(e) {
+        this.commData = e.detail.value
+        this.$apply()
+      },
+      // 发布
+      publish() {
+        this.$emit('commSub', this.commData)
+      },
+      // 失去焦点
+      blurChange() {
+        console.log('失去你')
+        this.hide = true
+        // this.an()
+        this.$apply()
+      },
+      // 获取焦点
+      async bindfocus(e) {
+        this.commData = ''
+        this.keyHeight = await e.detail.height
+        // this.an(this.keyHeight)
+        console.log('键盘高度变化', this.keyHeight)
+        this.$apply()
+      },
+      // 输入行数发送变化
+      bindlinechange(e) {
+        console.log(e.detail.lineCount, e.detail.lineHeight)
+        let lineCount = e.detail.lineCount
+        let lineHeight = e.detail.lineHeight
+        this.keybordHeight = (lineCount + 1) * lineHeight
+        this.$apply()
+      }
+    }
+      // 动画
+    an(px = 0) {
+      let animation = wx.createAnimation({
+        duration: 1000,
+        timingFunction: 'ease'
+      })
+      animation.bottom(px + 'rpx').step()
+      this.animationData = animation.export()
+      console.log('动画', this.animationData, this.keyHeight)
+      this.$apply()
+    }
+    onLoad() {}
+  }
+</script>

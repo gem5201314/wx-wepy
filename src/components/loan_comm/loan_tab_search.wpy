@@ -1,0 +1,114 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .p-tab-search {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .main {
+    position: relative;
+    width: 100%;
+    height: 88rpx;
+    background: #910A84;
+    .tab {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      .item {
+        width: 33%;
+        height: 100%;
+        display: flex; // border: 1px solid green;
+        box-sizing: border-box;
+        justify-content: flex-end;
+        align-items: center;
+        .item-border {
+          width: 105rpx;
+          text-align: center;
+          padding-bottom: 10rpx;
+          border-bottom: 6rpx solid #910A84;
+          box-sizing: border-box;
+          text {
+            font-size: 28rpx;
+            color: rgba(253, 253, 253, 0.5);
+          }
+        }
+      }
+    }
+    #border-tab {
+      border-bottom: 6rpx solid #fff;
+      text{
+         color: #fff;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='p-tab-search'>
+    <view class="tab-search-index">
+      <view class="main">
+        <view class="tab">
+          <view class="item" wx:for="{{tabList}}" wx:key="{{index}}" @tap="tabSelect({{item}},{{index}})">
+            <view class="item-border" id="{{tabIsSelect===index?'border-tab':''}}">
+              <text>{{item.text}}</text>
+            </view>
+          </view>
+          <view class="search item" @tap="searchChange">
+            <view class="item-border">
+              <text style="color: #fff;">按{{isSearch}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class PTabSearch extends wepy.component {
+    components = {}
+    data = {
+      tabIsSelect: 0, //
+      isSearch: '机构',
+      search: ['机构', '产品']
+    }
+    props = {
+      tabList: { // 选项卡列表
+        default: [
+          {
+            id: 1,
+            text: '信用贷'
+          },
+          {
+            id: 2,
+            text: '搜索贷'
+          }
+        ]
+      }
+    }
+    mixins = [tool, router]
+    methods = {
+      tabSelect(item, index) { // 选项卡
+        this.tabIsSelect = index
+        let data = {
+          ...item,
+          isSearch: this.isSearch
+        }
+        this.$emit('tabSearchChange', data)
+      },
+      searchChange() {
+        this.isSearch = this.search[0] === this.isSearch ? '产品' : '机构'
+        let data = {
+          ...this.tabList[0], // 默认数组第一项
+          isSearch: this.isSearch
+        }
+        this.$emit('tabSearchChange', data)
+      }
+    }
+    onLoad() {}
+  }
+</script>

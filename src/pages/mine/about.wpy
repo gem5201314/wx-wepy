@@ -1,0 +1,31 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.about-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='about-index'>
+      关于
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class About extends wepy.page {
+    config = {
+      navigationBarTitleText: '关于'
+    }
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

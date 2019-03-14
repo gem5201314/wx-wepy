@@ -1,0 +1,194 @@
+{
+	"description": "A WePY project",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true,
+		"autoAudits": false
+	},
+	"compileType": "miniprogram",
+	"appid": "wxa1d5caf3a6124ef1",
+	"projectname": "ryt-weapp",
+	"miniprogramRoot": "dist/",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 24,
+			"list": [
+				{
+					"id": -1,
+					"name": "贷款",
+					"pathName": "pages/loan",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "活动",
+					"pathName": "pages/activity",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "发现",
+					"pathName": "pages/find",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的",
+					"pathName": "pages/mine",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "智能匹配",
+					"pathName": "pages/home/match_base",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "智能匹配1",
+					"pathName": "pages/home/match_aptitude",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "智能匹配-完成",
+					"pathName": "pages/home/match_ready",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "产品详情",
+					"pathName": "pages/home/produce_info",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "申请",
+					"pathName": "pages/home/apply",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "申请1",
+					"pathName": "pages/home/apply_step",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "个人资料",
+					"pathName": "pages/mine/person_data",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "收藏",
+					"pathName": "pages/mine/collect",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的申请",
+					"pathName": "pages/mine/apply",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "申请详情",
+					"pathName": "pages/mine/apply_info",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "提现",
+					"pathName": "pages/mine/withdrawal",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "三级筛选",
+					"pathName": "pages/public_page/three_select_filter",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "申请第一步",
+					"pathName": "pages/home/apply_step",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "activity_info",
+					"pathName": "pages/activity/activity_info",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "资讯列表",
+					"pathName": "pages/news/list",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "认证资料",
+					"pathName": "pages/mine/approve",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "认证资料-身份认证",
+					"pathName": "pages/mine_second_level/approve_user",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "认证资料-企业认证",
+					"pathName": "pages/mine_second_level/approve_company",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "登录",
+					"pathName": "pages/login",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "钱包",
+					"pathName": "pages/mine/wallet",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "定位",
+					"pathName": "pages/public_page/select_city",
+					"scene": null
+				}
+			]
+		}
+	}
+}

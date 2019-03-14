@@ -1,0 +1,217 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .three-filter-index {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .content {
+    padding-left: 30rpx;
+    padding-right: 30rpx;
+    margin-bottom: 20rpx;
+    background: #fff;
+    box-sizing: border-box;
+    .select-title {
+      width: 100%;
+      height: 60rpx;
+      font-size: 28rpx;
+      line-height: 60rpx;
+      color: #999999;
+      border-bottom: 1rpx solid $borderColor;
+      box-sizing: border-box;
+    }
+    .select-value {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      padding-bottom: 30rpx;
+      box-sizing: border-box;
+      .value-item {
+        width: 23%;
+        height: 60rpx;
+        color: $mainColor;
+        font-size: 28rpx;
+        text-align: center;
+        line-height: 60rpx;
+        margin-right: 2%;
+        margin-top: 20rpx;
+        border-radius: 10rpx;
+        overflow: hidden;
+        border: 1px solid $mainColor;
+        box-sizing: border-box;
+      }
+      .active {
+        background: $mainColor;
+        color: #fff;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='three-filter-index'>
+    <view class="filter-main">
+      <view class="content" wx:for="{{filter}}" wx:key="{{index}}">
+        <view class="select-title">
+          {{item.type}}
+        </view>
+        <view class="select-value">
+          <repeat for="{{item.list}}" key="i" index="i" item="val">
+            <view class="{{val.select?'value-item active':'value-item'}}" @tap="selectItem({{index}},{{i}})">{{val.name}}</view>
+          </repeat>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class ThreeFilter extends wepy.component {
+    components = {}
+    data = {
+      selectData: [], // 选择的数据
+      filter: [ // 数据组
+        {
+          id: 1,
+          type: '房产类型',
+          list: [{
+            id: 11,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 12,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 13,
+            select: false,
+            name: '临街商铺'
+          },
+          {
+            id: 14,
+            select: false,
+            name: '公检法可做'
+          },
+          {
+            id: 15,
+            select: false,
+            name: '迪丽热巴'
+          }
+          ]
+        },
+        {
+          id: 1,
+          type: '产品特点',
+          list: [{
+            id: 11,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 12,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 13,
+            select: false,
+            name: '临街商铺'
+          },
+          {
+            id: 14,
+            select: false,
+            name: '公检法可做'
+          },
+          {
+            id: 15,
+            select: false,
+            name: '迪丽热巴'
+          }
+          ]
+        },
+        {
+          id: 1,
+          type: '征信',
+          list: [{
+            id: 11,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 12,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 13,
+            select: false,
+            name: '临街商铺'
+          },
+          {
+            id: 14,
+            select: false,
+            name: '公检法可做'
+          },
+          {
+            id: 15,
+            select: false,
+            name: '迪丽热巴'
+          }
+          ]
+        },
+        {
+          id: 1,
+          type: '贷款类型',
+          list: [{
+            id: 11,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 12,
+            select: false,
+            name: '迪丽热巴'
+          },
+          {
+            id: 13,
+            select: false,
+            name: '临街商铺'
+          },
+          {
+            id: 14,
+            select: false,
+            name: '公检法可做'
+          },
+          {
+            id: 15,
+            select: false,
+            name: '迪丽热巴'
+          }
+          ]
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      selectItem(index, i) {
+        this.filter[index]['list'][i]['select'] = !this.filter[index]['list'][i]['select']
+        // 数组制空
+        this.selectData = []
+        this.filter.map((vFilter, iFilter) => {
+          vFilter.list.map((vList, iList) => {
+            if (vList.select) {
+              this.selectData.push(vList)
+            }
+          })
+        })
+        this.$emit('selectValue', this.selectData)
+      }
+    }
+    onLoad() {}
+  }
+</script>

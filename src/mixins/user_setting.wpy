@@ -1,0 +1,73 @@
+
+<template>
+</template>
+<script>
+// 全局用户授权
+import wepy from 'wepy'
+import tip from '@/utils/Tips'
+import Router from '@/mixins/router'
+export default class UserSetting extends wepy.mixin {
+  data = {
+
+  }
+  methods = {
+
+  }
+  // 用户授权
+  _userPower(str = '录像') {
+    return new Promise((resolve, reject) => {
+      let param = str
+      // 发动授权
+      switch (param) {
+        case '拍照':
+        case '录音':
+          return 0
+        case '录像':
+          wx.authorize({scope: 'scope.record',
+            success(res) {
+              wx.authorize({scope: 'scope.camera',
+                success(res) {
+                  resolve('授权成功啦', res)
+                },
+                fail() {
+                  tip.error('你已拒绝授权，自己看着办')
+                  reject(Error, '授权失败啦')
+                }
+              })
+            },
+            fail() {
+              tip.error('你已拒绝授权，自己看着办')
+              reject(Error, '授权失败啦')
+            }
+          })
+
+          return 0
+        case '位置':
+          wx.getLocation({
+            type: 'wgs84',
+            altitude: true,
+            success(res) {
+              // const latitude = res.latitude
+              // const longitude = res.longitude
+              // const speed = res.speed
+              // const accuracy = res.accuracy
+              resolve(res)
+            },
+            fail() {
+              tip.error('你已拒绝授权，自己看着办')
+              new Router()._goRouter('/pages/public_page/power_set') // 跳转重新授权路由
+              reject(Error, '授权失败啦')
+            }
+          })
+          return 0
+        case '通讯地址':
+          return 0
+        case '相册':
+          return 0
+        case '微信运动步数':
+          return 0
+      }
+    })
+  }
+}
+</script>

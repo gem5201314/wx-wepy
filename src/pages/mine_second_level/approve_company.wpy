@@ -1,0 +1,124 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .approve-company-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+  .content-one {
+    width: 100%;
+  }
+  .content-two {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .top {
+      margin-top: 30rpx;
+      font-size: 28rpx;
+      color: #AAAAAA;
+      text-align: center;
+    }
+    .img-show-user {
+      margin-top: 30rpx;
+      width: 460rpx;
+      height: 290rpx;
+      overflow: hidden; // border: 1px solid red;
+    }
+  }
+</style>
+
+<template>
+  <view class='approve-company-index'>
+    <Step :currentIndex.sync="currentStep" :stepList="stepList">
+      <!-- 第一步 -->
+      <view class="step-one" wx:if="{{currentStep===1}}">
+        <view class="content-one">
+          <Name text="企业名称" placeholder="请输入营业执照上的名称"></Name>
+          <Register text="营业执照注册号/统一社会信用代码" placeholder="15位营业执照注册号或是18位统一社会信用代码"></Register>
+          <Organization text="组织机构代码证/统一社会信用代码" placeholder="9位组织机构代码证或是18位统一社会信用代码"></Organization>
+        </view>
+      </view>
+      <!-- 第二步 -->
+      <view class="step-two" wx:if="{{currentStep===2}}">
+        <view class="content-two">
+          <view class="top">营业执照/多合一营业执照</view>
+          <view class="img-show-user">
+            <image src="http://static.laoganbu.cn/9c21c2d423c9b52488bd441ddce1757984824596.png"></image>
+          </view>
+          <view class="top">组织机构代码证/多合一营业执照</view>
+          <view class="img-show-user">
+            <image src="http://static.laoganbu.cn/df5b1258716a9d53630d9fac19592e0a75993aba.png"></image>
+          </view>
+        </view>
+      </view>
+      <!-- 第三步 -->
+      <view class="step-three" wx:if="{{currentStep===3}}">
+        <Notice type="wait" text="公司资料需要1-2个工作日审核"></Notice>
+      </view>
+    </Step>
+    <FixButton :text.sync="buttonText" @submit.user="subStep"></FixButton>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  import InputUpDown from '@/components/public_components/p_input_up_text' // 底部按钮
+  import Step from '@/components/public_components/p_step' // 步骤条
+  import Notice from '@/components/public_components/p_notice_status' // 通知
+  export default class ApproveCompany extends wepy.page {
+    config = {
+      navigationBarTitleText: '企业认证'
+    }
+    components = {
+      FixButton,
+      Step,
+      Notice,
+      Name: InputUpDown,
+      Register: InputUpDown,
+      Organization: InputUpDown
+    }
+    data = {
+      buttonText: '下一步', // 按钮文字
+      currentStep: 1, // 当前步骤
+      stepList: [ // 步骤信息
+        {
+          id: 1,
+          name: '企业信息录入'
+        },
+        {
+          id: 2,
+          name: '企业信息上传'
+        },
+        {
+          id: 3,
+          name: '等待审核'
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      subStep() { // 步骤进度事件
+        if (this.currentStep === 1) {
+          this.buttonText = '下一步'
+        }
+        if (this.currentStep === 2) {
+          this.buttonText = '完成'
+        }
+        if (this.currentStep === 3) {
+          this.buttonText = '确定'
+          this._goRouter('/pages/mine/approve')
+        }
+        console.log('-----------^^^^^------------邓紫棋', this.currentStep)
+        this.currentStep = this.currentStep + 1
+        console.log('-----------^^^^^------------邓紫棋', this.currentStep)
+      }
+    }
+    onLoad() {}
+  }
+</script>

@@ -1,0 +1,18 @@
+
+$mainColor: #A31896;//主要视觉
+$bgColor: #F0F5F7; //背景
+$borderColor: #D7DBDF;  // 边界颜色
+$whiteRgba:rgba(253, 253, 253, 0.5);//白色半透明
+$mainColorRgba:rgba(154, 29, 154, 0.8);//主颜色透明
+$black:#444444;
+$gray:gray;
+
+//文字溢出显示样式mixin... $cloum为行数 
+@mixin -text-overflow($cloum){ 
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $cloum;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

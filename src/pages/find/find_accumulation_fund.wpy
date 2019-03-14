@@ -1,0 +1,43 @@
+Accumulation fund<style lang='scss' scoped>
+@import '../../scss/common';
+.find-accumulation-fund-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='find-accumulation-fund-index'>
+      <Account text="公积金账号" :model="account"></Account>
+      <Password text="密码" :model="password"></Password>
+      <FixButton text="下一步"></FixButton>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import InputAuto from '@/components/public_components/p_input_left_text' // 左边文字的普通输入框
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class FindAccumulationFund extends wepy.page {
+    config = {
+      navigationBarTitleText: '公积金查询'
+    }
+    components = {
+      FixButton,
+      Account: InputAuto,
+      Password: InputAuto
+
+    }
+    data = {
+      account: '',
+      password: ''
+    }
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

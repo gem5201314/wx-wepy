@@ -1,0 +1,143 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.p-icon-nav{
+ width: 100%;
+ overflow-x: hidden;
+ box-sizing: border-box;
+}
+.nav-content{
+  padding-left: 30rpx;
+  box-sizing: border-box;
+  background: #fff;
+}
+.main{
+    display: flex;
+    width: 100%;
+    height: 90rpx;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1rpx solid $borderColor;
+    box-sizing: border-box;
+  .left{
+    flex: 1;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    // border: 1px solid green;
+    box-sizing: border-box;
+    .left-icon{
+      width: 50rpx;
+      height: 50rpx;
+      margin-right:30rpx;
+      // border: 1px solid green;
+    }
+    .text{
+      flex: 1;
+      font-size: 32rpx;
+      color: #3F3F3F;
+      // padding-left: 30rpx;
+      box-sizing: border-box;
+    }
+  }
+
+  .right{
+    width: 250rpx;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    // border:1px solid green;
+    box-sizing: border-box;
+    .icon{
+      width:40rpx;
+      height: 40rpx;
+    }
+    .font{
+      font-size: 32rpx;
+      padding-right: 20rpx;
+      @include -text-overflow(1);
+      // color: $mainColor;
+    }
+  }
+}
+#top-margin{
+  margin-top: 30rpx;
+}
+</style>
+
+<template>
+  <view class='p-icon-nav'>
+      <view class="nav-main">
+        <view class="nav-content">
+            <view class="main" id="{{topMargin?'top-margin':''}}" @tap="tapRouter">
+              <view class="left">
+                <!--  -->
+              <view class="left-icon" wx:if="{{imgIcon!=='no'}}">
+                <image src="{{imgIcon}}"></image>
+              </view>
+               <!--  -->
+              <view class="text">{{text}}</view>
+              </view>
+              <view class="right">
+                  <view>
+                     <!-- 默认插槽 -->
+                    <slot></slot>
+                  </view>
+                  <view class="font" style="color:{{rightColor}}">{{rightText}}
+                  </view>
+                  <view class="icon">
+                    <image src="{{_imgIconRight}}"></image>
+                  </view>
+              </view>
+            </view>
+        </view>
+      </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class PIconNav extends wepy.component {
+    components = {}
+    data = {}
+    props={
+      imgIcon: {// 图标  为no时不显示图标定位
+        default: 'http://static.laoganbu.cn/409b70ba066d302ac050051629b6014a4253ed3e.jpg'
+      },
+      topMargin: { // 是否需要margin-top 30rpx
+        default: false
+      },
+      text: {     // 显示的标题
+        default: '导航路由'
+      },
+      url: {      // 导航的URL
+        default: false
+      },
+      rightText: {// 右边是否需要显示文字信息
+        default: ''
+      },
+      rightColor: { // 右边文字颜色 默认主颜色
+        default: '#A31896'
+      },
+      query: { // 携带的路由参数
+        default: {}
+      }
+    }
+    mixins = [tool, router]
+    methods = {
+      tapRouter() { // 路由跳转
+        if (Object.prototype.toString.call(this.url) === '[object String]') {
+          this._goRouter(this.url, this.query)
+        }
+        if (Object.prototype.toString.call(this.url) === '[object Object]') {
+          this._goRouter(this.url.url, this.query)
+        }
+        if (!this.url) {
+          console.log('-----------^^^^^------------没有URL')
+          return 0
+        }
+      }
+    }
+    onLoad() {}
+  }
+</script>

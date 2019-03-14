@@ -1,0 +1,111 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .activity-list {
+    width: 100%;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    background: #fff;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .list-index {
+    .list-main {
+      margin-top: 30rpx;
+      border-bottom: 1rpx solid $borderColor;
+      .top-img {
+        position: relative;
+        .img {
+          width: 100%;
+          height: 360rpx;
+          border-radius: 10rpx;
+          overflow: hidden;
+        }
+        .img-text {
+          position: absolute;
+          width: 90rpx;
+          height: 30rpx;
+          color: #FFFFFF;
+          font-size: 20rpx;
+          text-align: center;
+          line-height: 30rpx;
+          bottom: 20rpx;
+          left: 20rpx;
+          border-radius: 5rpx;
+        }
+      }
+      .dis {
+        width: 100%;
+        height: 110rpx;
+        // border: 1px solid red;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 20rpx;
+        padding-bottom: 10rpx;
+        box-sizing: border-box;
+        .left-div {
+          height: 100%;
+          flex: 1;
+          display: flex;
+          // border: 1px solid green;
+          box-sizing: border-box;
+          .text {
+            box-sizing: border-box;
+            .name {
+              font-size: 32rpx;
+              color: #444444;
+              @include -text-overflow(1);
+            }
+            .discript {
+              font-size: 24rpx;
+              color: #999999;
+              @include -text-overflow(1);
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='activity-list'>
+    <view class="list-index">
+      <view class="list-main" wx:for="12331223332222" wx:key="{{index}}" @tap="toInfo">
+        <view class="top-img">
+          <view class="img">
+            <image src="{{_img1}}"></image>
+          </view>
+          <view class="img-text" style="background:#FFA300" wx:if="{{item==='1'}}">未开始</view>
+          <view class="img-text" style="background:#A31896" wx:if="{{item==='2'}}">进行中</view>
+          <view class="img-text" style="background:#999999" wx:if="{{item==='3'}}">已结束</view>
+        </view>
+        <view class="dis">
+          <view class="left-div">
+            <view class="text">
+              <view class="name">想要问问你敢不敢</view>
+              <view class="discript">无需抵押凭打卡工资即可申请aaaaaaaaaaaaaaaaaaaaaaaaa</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class Activitylist extends wepy.component {
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    methods = {
+      toInfo() {
+        this._goRouter('/pages/activity/activity_info')
+      }
+    }
+    onLoad() {}
+  }
+</script>

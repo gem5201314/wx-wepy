@@ -1,0 +1,174 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .apply-info-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+  .main {
+    .top {
+      width: 100%;
+      height: 600rpx;
+      position: relative; // border:1px solid red;
+      .img {
+        width: 100%;
+        height: 100%;
+      }
+      .img-text {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding-left: 20rpx;
+        padding-right: 20rpx;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        .cloum {
+          width: 100%;
+          height: 200rpx;
+          padding-top: 50rpx;
+          border-top: 1rpx solid $whiteRgba;
+          text-align: center;
+          box-sizing: border-box;
+          .title {
+            font-size: 36rpx;
+            color: #fff;
+          }
+          .dis {
+            margin-top: 20rpx;
+            font-size: 24rpx;
+            color: $whiteRgba;
+          }
+        }
+      }
+    }
+    .bottom {
+      .card {
+        background: #fff;
+        margin-bottom: 30rpx;
+        .card-main {
+          display: flex;
+          width: 100%;
+          height: 190rpx;
+          overflow-x: hidden;
+          justify-content: space-around;
+          align-items: center;
+          padding: 20rpx;
+          padding-left: 0;
+          margin-left: 20rpx;
+          border-bottom: 1rpx solid $borderColor;
+          box-sizing: border-box;
+          .left-img {
+            width: 220rpx;
+            height: 100%; // border: 1px solid green;
+            box-sizing: border-box;
+            .img {
+              width: 220rpx;
+              height: 100%;
+              border-radius: 10rpx;
+              overflow: hidden;
+            }
+          }
+          .center-dis {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            padding-left: 30rpx; // border: 1px solid green;
+            box-sizing: border-box;
+            .top-text {
+              color: #444444;
+              font-size: 32rpx;
+              @include -text-overflow(1);
+            }
+            .bottom-dis {
+              color: #999999;
+              font-size: 24rpx;
+              @include -text-overflow(1);
+            }
+          }
+        }
+        .bottom-text {
+          padding: 20rpx;
+          display: flex;
+          justify-content: space-between;
+          .item{
+            width: 50%;
+            font-size: 24rpx; 
+            color: #444444;
+            text-align: center;
+            .apply-num{
+              color: $mainColor;
+              font-size: 58rpx;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='apply-info-index'>
+    <view class="main">
+      <view class="top">
+        <view class="img">
+          <image src="http://static.rytjr168.com/448777e574590d69cef9b3f982934f63e46a5cd4.png"></image>
+        </view>
+        <view class="img-text">
+          <view class="cloum">
+            <view class="title">正在进行审核</view>
+            <view class="dis">您的申请已受理，请耐心等待</view>
+          </view>
+        </view>
+      </view>
+      <view class="bottom">
+        <view class="card">
+          <view class="card-main">
+            <view class="left-img">
+              <view class="img">
+                <image src="{{_img1}}"></image>
+              </view>
+            </view>
+            <view class="center-dis">
+              <view class="top-text">花旗银行 - 幸福时代</view>
+              <view class="bottom-dis">2019-02-25 14:25:20</view>
+            </view>
+          </view>
+          <view class="bottom-text" @tap="toStep">
+            <view class="item">
+              <view class="apply-title">申请金额</view>
+              <view class="apply-num">5.4万</view>
+            </view>
+            <view class="item">
+              <view class="apply-title">申请期限</view>
+              <view class="apply-num">12个月</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class ApplyInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '申请详情'
+    }
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

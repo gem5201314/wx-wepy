@@ -1,0 +1,61 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .match-base-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <view class='match-base-index'>
+     <Occupation></Occupation>
+    <Funds :model="funds" text="是否有本地公积金" ifYes="公积金连续缴存时间(月)"></Funds>
+    <SocialSecurity :model="socialSecurity" text="是否有本地社保" ifYes="社保连续缴存时间(月)"></SocialSecurity>
+    <House></House>
+    <Car text="是否有车"></Car>
+    <Credit text="信用情况"></Credit>
+    <FixButton text="提交" @submit.user="submit"></FixButton>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  import Select from '@/components/public_components/p_select' // 选择器
+  import Occupation from '@/components/label/select_occupation_auto' // 职业
+  import SocialSecurityFunds from '@/components/label/social_security_funds' // 公积金 社保
+  import House from '@/components/label/select_house_property' // 房子
+  export default class MatchBase extends wepy.page {
+    config = {
+      navigationBarTitleText: '资质信息'
+    }
+    components = {
+      FixButton,
+      Occupation,
+      House,
+      Car: Select, // 车
+      Credit: Select, // 信用情况
+      Funds: SocialSecurityFunds, // 公积金
+      SocialSecurity: SocialSecurityFunds // 社保
+    }
+    data = {
+      selectValue: {
+        id: 2,
+        name: '白大哥'
+      }
+    }
+    mixins = [tool, router]
+    methods = {
+      // 提交
+      submit() {
+        this._goRouter('/pages/home/match_ready')
+      }
+    }
+    onLoad() {}
+  }
+</script>

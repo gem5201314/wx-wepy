@@ -1,0 +1,72 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .select-fund-auto-index {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <view class='select-fund-auto-index'>
+    <Funds :text="text" :model="funds" @change.user="change" ListType="yesNo"></Funds>
+    <FundsValue :text="ifYes" wx:if="{{funds.name==='是'}}" unit="月" :model="fundsValue"></FundsValue>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Select from '@/components/public_components/p_select' // 普通选择器
+  import InputUnit from '@/components/public_components/p_input_left_text_unit' // 带单位输入框
+  export default class SocialSecurityFunds extends wepy.component {
+    components = {
+      Funds: Select,
+      FundsValue: InputUnit
+    }
+    props={
+      text: {
+        default: '是否有本地公积金'
+      },
+      ifYes: {
+        default: '公积金连续缴存时间'
+      },
+      model: { // 数据绑定
+        default: '',
+        twoWay: true
+      }
+    }
+    data = {
+      showText: '',
+      funds: '',
+      fundsValue: ''
+    }
+    mixins = [tool, router]
+    watch={
+      fundsValue() {
+        this.setModel()
+      },
+      funds() {
+        this.setModel()
+      }
+    }
+    setModel() { // 设置数据
+      this.model = {
+        result: this.funds,
+        value: this.fundsValue
+      }
+    }
+    methods = {
+      change(res) { // 选择器事件
+        this.$apply()
+      }
+    }
+      // 数据构造 --->该函数给父组件调用
+    dataRest() {
+      let dataForm = {}
+      return dataForm
+    }
+    onLoad() {}
+  }
+</script>

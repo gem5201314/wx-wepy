@@ -1,0 +1,58 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.p-notice-yes-index{
+ width: 100%;
+ overflow-x: hidden;
+ box-sizing: border-box;
+}
+.content{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top:25%;
+  // border: 1px solid red;
+  box-sizing: border-box;
+  .text{
+    margin-top: 30rpx;
+    font-size: 32rpx;
+    color: #212121;
+  }
+}
+.icon{
+  width: 200rpx;
+  height: 200rpx;
+}
+</style>
+
+<template>
+  <view class='p-notice-yes-index'>
+      <view class="content">
+         <view class="icon">
+      <image wx:if="{{type==='yes'}}" src="/image/public_components_icon/info_yes.png"></image>
+      <image wx:if="{{type==='wait'}}" src="/image/public_components_icon/info_wait.png"></image>
+    </view>
+    <view class="text">{{text}}</view>
+      </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class NoticeYes extends wepy.component {
+    components = {}
+    data = {}
+    props={
+      type: {
+        default: 'yes'
+      },
+      text: {
+        default: '成功，啦啦啦啦'
+      }
+    }
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

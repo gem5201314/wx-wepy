@@ -1,0 +1,92 @@
+<style lang="scss" scoped>
+  .swiper-item{
+    width: 100%;
+    height: auto;
+    .main{
+      position: relative;
+    }
+  }
+  .slot-class{
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+  }
+</style>
+<template lang="wxml">
+    <view> 
+      <swiper
+          style="height: 380rpx;"  
+         indicator-dots="{{indicatorDots}}"
+         autoplay="{{autoplay}}" 
+         indicator-color="{{indicator_color}}"
+         indicator-active-color="{{active_color}}"
+         @change="swiperChange">
+         <block wx:for="{{list}}" wx:key="{{index}}" class="swiper-class" @tap="clickSwiper({{item}})">
+            <swiper-item>
+                <!--轮播item -->
+                <view class="main" style="width:{{imgWidth}};height:{{imgHeight}}">
+                  <image style="height;100%;width:100%" src="{{imgHttp}}{{item[imgkey]}}"/>
+                  <!--自定义插槽-->
+                  <view class="slot-class">
+                     <slot name="content"></slot>
+                  </view>
+                </view>
+            </swiper-item>
+        </block>
+  </block>
+</swiper>
+    </view>
+</template>
+<script>
+import wepy from 'wepy'
+export default class Carousel extends wepy.component {
+  components = {
+  };
+  props={
+    list: { // 轮播图数据
+      default: []
+    },
+    imgkey: { // 显示图片对象的键
+      default: 'img'
+    },
+    imgHttp: {// 图片URL前缀
+      default: 'http://static.laoganbu.cn/'
+    },
+    imgWidth: {// 图片宽
+      default: '100%'
+    },
+    imgHeight: {// 图片高
+      default: '100%'
+    },
+    autoplay: {// 自动轮播
+      default: true
+    },
+    indicator_color: {// 小圆点颜色
+      default: 'gary'
+    },
+    active_color: {// 当前小圆点颜色
+      default: '#fff'
+    },
+    indicatorDots: {// 是否显示小圆点
+      default: true
+    }
+
+  }
+  data = {}
+  methods = {
+    clickSwiper(val) { // 轮播点击
+      this.$emit('click', val)
+    },
+    swiperChange(val) { // 轮播滑动
+      let data = val.detail.current
+      this.$emit('change', data)
+    }
+
+  };
+
+  events = {};
+}
+</script>

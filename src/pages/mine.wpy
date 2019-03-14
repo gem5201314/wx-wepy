@@ -1,0 +1,168 @@
+<style lang='scss' scoped>
+  @import '../scss/common';
+  .mine-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+  .top-bg-main {
+    // border: 1px solid red;
+    position: relative;
+    .bg-img {
+      width: 100%;
+      height: 330rpx;
+    }
+    .content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      .row {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 60rpx;
+        // border: 1px solid #000;
+        box-sizing: border-box;
+        .left-head {
+          width: 140rpx;
+          height: 140rpx;
+          border-radius: 140rpx;
+          overflow: hidden;
+        }
+        .right-text {
+          flex: 1;
+          padding-left: 30rpx;
+          // border: 1px solid green;
+          box-sizing: border-box;
+          .login {
+            color: #ffffff;
+            font-size: 32rpx;
+          }
+          .dis {
+            color: $whiteRgba;
+            font-size: 24rpx;
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='mine-index'>
+    <!-- 头部布局 -->
+    <view class="top-bg">
+      <view class="top-bg-main">
+        <view class="bg-img">
+          <image src="http://static.rytjr168.com/3ce303ccae863bcb57fe10851dcec824c1682005.png"></image>
+        </view>
+        <view class="content" @tap="toLogin">
+          <view class="row">
+            <view class="left-head">
+              <image src="{{_img1}}"></image>
+            </view>
+            <view class="right-text">
+              <view class="login">立即登录</view>
+              <view class="dis">登录即享受更多服务</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view> 
+    <!-- 导航 -->
+    <repeat for="{{navArr}}" key="index" index="index" item="item">
+         <TitleNav :imgIcon="item.icon" :topMargin="item.topMargin" :text="item.text" :url="item"></TitleNav>
+    </repeat>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import TitleNav from '@/components/public_components/p_icon_nav' // 导航
+  export default class Mine extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的'
+    }
+    components = {
+      TitleNav
+    }
+    data = {
+      navArr: [
+        {
+          topMargin: true,
+          icon: '/image/mine/mine_ic_invite.png',
+          text: '邀请有礼',
+          url: '/pages/mine/invite'
+        },
+        {
+          topMargin: true,
+          icon: '/image/mine/mine_ic_wallet.png',
+          text: '我的钱包',
+          url: '/pages/mine/wallet'
+        },
+        {
+          topMargin: false,
+          icon: '/image/mine/mine_ic_card.png',
+          text: '银行卡管理',
+          url: '/pages/mine/bank_card'
+        },
+        {
+          topMargin: false,
+          icon: '/image/mine/mine_ic_invest.png',
+          text: '我的投资',
+          url: '/pages/mine/invest'
+        },
+        {
+          topMargin: true,
+          icon: '/image/mine/mine_ic_approve.png',
+          text: '认证资料',
+          url: '/pages/mine/approve'
+        },
+        {
+          topMargin: false,
+          text: '我的申请',
+          icon: '/image/mine/mine_ic_apply.png',
+          url: '/pages/mine/apply'
+        },
+        {
+          topMargin: false,
+          text: '我的收藏',
+          icon: '/image/mine/mine_ic_collect.png',
+          url: '/pages/mine/collect'
+        },
+        {
+          topMargin: true,
+          text: '关于',
+          icon: '/image/mine/mine_ic_about.png',
+          url: '/pages/mine/about'
+        },
+        {
+          topMargin: false,
+          text: '设置',
+          icon: '/image/mine/mine_ic_setting.png',
+          url: '/pages/mine/setting'
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      toLogin() {
+        this._userInfo = 12
+        this._userIsLogin().then((res) => {
+          // 用户已登录 跳转个人资料
+          this._goRouter('/pages/mine/person_data')
+        })
+      }
+    }
+    onLoad() {}
+}
+</script>

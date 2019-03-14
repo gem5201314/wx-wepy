@@ -1,0 +1,133 @@
+<style lang="scss" scoped>
+  @import '../../scss/common';
+  .comment-page {
+    width: 100%;
+    background: $bgColor;
+    padding-bottom: 100rpx;
+    box-sizing: border-box;
+  }
+  .comment-list {
+    padding-left: 40rpx;
+    background: #fff;
+  }
+  .bn {
+    width: 100%; // border: 1px solid red;
+    position: fixed;
+    bottom: 0;
+    box-sizing: border-box;
+    button {
+      border-radius: 0;
+      background: $mainColor;
+      color: #fff
+    }
+  } // 
+
+</style>
+
+<template>
+  <view class="comment-page">
+    <view class="comment-list">
+      <CommentItem :userId.sync="userId" wx:if="{{commentList.length>0}}" :commentList.sync="commentList" @delComment.user="delComment" @backComment.user="backComment"></CommentItem>
+      <Empty wx:if="{{commentList.length===0}}" title="暂无评论喔" subtitle="快来评论吧"></Empty>
+    </view>
+    <view >
+          <CommInput :hide.sync="isHide" @commSub.user="commSub"></CommInput>
+    </view>
+    <!-- button -->
+    <view class="bn" wx:if="{{isHide}}">
+      <button @tap="showInput" >发布评论</button>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import comment from '@/api/comment'
+  import CommentItem from '@/components/news_comm/comment_item'
+  import CommInput from '@/components/news_comm/comm_input'
+  import Empty from '@/components/public_components/p_empty'
+  import tips from '@/utils/Tips'
+  export default class CommentPage extends wepy.page {
+    config = {
+      navigationBarTitleText: '全部评论'
+    }
+    components = {
+      CommentItem,
+      CommInput,
+      Empty
+    }
+    data = {
+      isHide: true,
+      commentList: [], // 评论列表
+      callBackId: '', // 回复ID,
+      userId: ''// 当前用户ID
+    }
+    mixins = [tool, router]
+    methods = {
+      // 发表评论 回复评论
+      async commSub(value) {
+        let data = {
+          content: value
+        }
+        let query = {
+          ...data, // 评论内容
+          sourceType: 'news',
+          sourceId: this._getRouterQuery.id, // 帖子ID
+          answerId: this.callBackId // 回复评论的评论ID
+        }
+        let mapTip = new Map([['content', ['评论不能为空', '评论']]])
+        await this._formIsOk(data, mapTip)
+        this.add(query)
+        this.isHide = true
+        this.$apply()
+      },
+      // 显示发表评论框
+      showInput() {
+        this.callBackId = ''
+        this.showComm()
+      },
+      // 回复
+      backComment(val) {
+        this.callBackId = val.id
+        this.showComm()
+      },
+      // 删除
+      async delComment(val) {
+        await tips.confirm('是否删除')
+        let queryUrl = val.id
+        await this.delComment(queryUrl)
+        tips.success('删除成功')
+      }
+    }
+    // 显示评论框
+    showComm() {
+      this.isHide = false
+      this.$apply()
+    }
+    // 获取评论列表
+    async getCommentList() {
+      let query = {
+        type: 'news'
+      }
+      this.commentList = await comment.commentList(this._getRouterQuery.id, query)
+      this.userId = wepy.getStorageSync('user').userId
+      this.$apply()
+    }
+    // 新增评论
+    async add(queryUrl, query) {
+      await comment.addComment(queryUrl, query)
+      tips.success('发表成功')
+      this.getCommentList()
+    }
+    // 删除评论
+    async delComment(queryUrl) {
+      await comment.delComment(queryUrl)
+      tips.success('删除成功')
+      this.getCommentList()
+    }
+    onLoad() {
+      this.getCommentList()
+    }
+  }
+</script>

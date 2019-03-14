@@ -1,0 +1,171 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .select-occupation-auto-index {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <!-- 自定义多功能职业选择器 -->
+  <view class='select-occupation-auto-index'>
+    <OccupationSelect text="职业" :array.sync="list" :model="occupation" @change.user="change"></OccupationSelect>
+    <!-- wx:if 部分-->
+    <!-- 上班族 -->
+    <view wx:if="{{occupation.key==='work'}}">
+      <WorkPay text="工资发放形式" :array.sync="payTypeList" :model="workPay"></WorkPay>
+      <WorkGet text="工资收入" :model="workGet"></WorkGet>
+      <WorkAge text="工作年限" :array.sync="workingYearsList" :model="workAge"></WorkAge>
+    </view>
+    <!-- 个体户 -->
+    <view wx:if="{{occupation.key==='person'}}">
+      <PersonYears text="经营年限" :array.sync="BusinessYearsList" :model="personYears"></PersonYears>
+      <PersonStream text="总经营流水/月" :model="personStream"></PersonStream>
+      <PersonCash text="现金结算营收收入/月" :model="personCash"></PersonCash>
+      <PersonCity text="经营注册地" :array.sync="placeBusinessList" :model="personCity"></PersonCity>
+      <PersonLicense text="是否办理过营业执照" :array.sync="licenseList" :model="personLicense"></PersonLicense>
+    </view>
+    <!-- 无固定职业 -->
+    <view wx:if="{{occupation.key==='no'}}">
+      <NoGet text="收入/月" :model="noGet"></NoGet>
+    </view>
+    <!-- 企业主 -->
+    <view wx:if="{{occupation.key==='boss'}}">
+      <BossYears text="经营年限" :array.sync="BusinessYearsList" :model="bossYears"></BossYears>
+      <BossStream text="总经营流水/月" :model="bossStream"></BossStream>
+      <BossPublicAccount text="对公账户营业收入/月" :model="bossPublicAccount"></BossPublicAccount>
+      <BossCity text="经营注册地" :array.sync="placeBusinessList" :model="bossCity"></BossCity>
+      <BossLicense text="是否办理过营业执照" :array.sync="LicenseList" :model="bossLicense"></BossLicense>
+    </view>
+    <!-- 学生 -->
+    <view wx:if="{{occupation.key==='student'}}"></view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Select from '@/components/public_components/p_select' // 普通选择器
+  import Input from '@/components/public_components/p_input_left_text' // 普通输入框
+  import InputUnit from '@/components/public_components/p_input_left_text_unit' // 带单位输入框
+  import json from './occupation_json.js'
+  export default class SelectOccupationAuto extends wepy.component {
+    constructor() {
+      super()
+      // 配置固定数据
+      this.data.list = json.list
+      this.data.payTypeList = json.payTypeList
+      this.data.workingYearsList = json.workingYearsList
+      this.data.BusinessYearsList = json.BusinessYearsList
+      this.data.placeBusinessList = json.placeBusinessList
+      this.data.licenseList = json.licenseList
+    }
+    components = {
+      OccupationSelect: Select,
+      Input,
+      InputUnit,
+      // 上班族
+      WorkPay: Select, // 工资发放形式
+      WorkGet: InputUnit, // 工资收入
+      WorkAge: Select, // 工龄
+      // 个体户
+      PersonYears: Select, // 经营年限
+      PersonStream: InputUnit, // 总流水
+      PersonCash: InputUnit, // 现金流
+      PersonCity: Select, // 经营注册地
+      PersonLicense: Select, // 营业执照
+      // 无固定职业
+      NoGet: InputUnit, // 收入
+      // 企业主
+      BossYears: Select, // 经营年限
+      BossStream: InputUnit, // 总流水
+      BossPublicAccount: InputUnit, // 对公账户营业收入
+      BossCity: Select, // 经营注册地
+      BossLicense: Select // 营业执照
+      // 学生
+    }
+    data = {
+      // 表单数据
+      occupation: '', // 职业
+      // 上班族
+      workPay: '', // 工资发放形式
+      workGet: '', // 工资收入
+      workAge: '', // 工龄
+      // 个体户
+      personYears: '', // 经营年限
+      personStream: '', // 总流水
+      personCash: '', // 现金流
+      personCity: '', // 经营注册地
+      personLicense: '', // 营业执照
+      // 无固定职业
+      noGet: '', // 收入
+      // 企业主
+      bossYears: '', // 经营年限
+      bossStream: '', // 总流水
+      bossPublicAccount: '', // 对公账户营业收入
+      bossCity: '', // 经营注册地
+      bossLicense: '', // 营业执照
+
+      // 配置数据列表
+      list: [], // 职业
+      payTypeList: [], // 工资发放形式
+      workingYearsList: [], // 工龄
+      BusinessYearsList: [], // 经营年限
+      placeBusinessList: [], // 经营注册地
+      licenseList: []// 营业执照
+    }
+    mixins = [tool, router]
+    methods = {
+      change(res) { // 职业选择器事件
+        this.$apply()
+      }
+    }
+      // 数据构造 --->该函数给父组件调用
+    dataRest() {
+      let dataForm = {}
+      if (this.occupation.key === 'work') {
+        dataForm = { // 构造数据
+          occupation: this.occupation,
+          workPay: this.workPay, // 工资发放形式
+          workGet: this.workGet, // 工资收入
+          workAge: this.workAge // 工龄
+        }
+      }
+      if (this.occupation.key === 'person') {
+        dataForm = { // 构造数据
+          occupation: this.occupation,
+          personYears: this.personYears, // 经营年限
+          personStream: this.personStream, // 总流水
+          personCash: this.personCash, // 现金流
+          personCity: this.personCity, // 经营注册地
+          personLicense: this.personLicense // 营业执照
+        }
+      }
+      if (this.occupation.key === 'no') {
+        dataForm = { // 构造数据
+          occupation: this.occupation,
+          noGet: this.noGet // 收入
+        }
+      }
+      if (this.occupation.key === 'boss') {
+        dataForm = { // 构造数据
+          occupation: this.occupation,
+          bossYears: this.bossYears, // 经营年限
+          bossStream: this.bossStream, // 总流水
+          bossPublicAccount: this.bossPublicAccount, // 对公账户营业收入
+          bossCity: this.bossCity, // 经营注册地
+          bossLicense: this.bossLicense // 营业执照
+        }
+      }
+      if (this.occupation.key === 'student') {
+        dataForm = { // 构造数据
+          occupation: this.occupation
+        }
+      }
+      return dataForm
+    }
+    onLoad() {}
+  }
+</script>

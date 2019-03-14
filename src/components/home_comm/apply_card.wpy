@@ -1,0 +1,116 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .apply-card-index {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .apply{
+    width: 100%;
+    height: 350rpx;
+    padding: 20rpx;
+    box-sizing: border-box;
+  }
+  .card {
+    width: 100%;
+     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background: #fff;
+    padding: 30rpx;
+    border-radius: 10rpx;
+    box-sizing: border-box;
+    .top-tip {
+      width: 100%;
+      font-size: 28rpx;
+      color: #000000;
+    }
+    .center-input {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding-bottom: 30rpx;
+      border-bottom: 1rpx solid $borderColor;
+      .icon {
+        width: 50rpx;
+        height: 50rpx;
+      }
+      .input-v {
+        flex: 1;
+        padding-left: 20rpx;
+        // border: 1px solid red;
+        box-sizing: border-box;
+      }
+    }
+    .bottom-dis {
+       font-size: 28rpx;
+      color: #AAAAAA;
+    }
+  }
+</style>
+
+<template>
+  <view class='apply-card-index'>
+    <view class="apply">
+      <view class="card">
+        <view class="top-tip">{{upText}}</view>
+        <view class="center-input">
+          <view class="icon">
+            <image wx:if="{{type==='money'}}" src="{{_imgIconMoney}}"></image>
+            <image wx:if="{{type==='date'}}" src="{{_imgIconDate}}"></image>
+          </view>
+          <view class="input-v">
+            <input 
+              placeholder-style="color: #AAAAAA;font-size: 32rpx;" 
+              value="{{model}}" 
+              placeholder="{{placeholder}}" 
+              maxlength="{{size}}"
+              @input="change"></input>
+          </view>
+        </view>
+        <view class="bottom-dis">{{downText}}</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class applyCard extends wepy.component {
+    components = {}
+    data = {}
+    props={
+      upText: { // 上边显示名字
+        default: '输入框名字'
+      },
+      downText: {  // 下边显示文字
+        default: '1000~2000万'
+      },
+      model: {// 动态绑定的值
+        default: '',
+        twoWay: true
+      },
+      placeholder: {
+        default: '请输入提示信息'
+      },
+      size: { // 输入框输入字符多少
+        default: 20
+      },
+      type: {
+        default: 'date'
+      }
+    }
+    mixins = [tool, router]
+    methods = {
+      change(e) {
+        this.model = e.detail.value
+        this.$apply()
+        this.$emit('change', this.model)
+      }
+    }
+    onLoad() {}
+  }
+</script>

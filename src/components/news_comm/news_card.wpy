@@ -1,0 +1,92 @@
+<style lang="scss" scoped>
+  @import '../../scss/common';
+  .news-card {
+    display: flex;
+    flex-direction: column;
+    padding: 30rpx 0 0;
+    margin: 0 40rpx;
+    border-bottom: 1rpx solid $borderColor;
+    &:last-child {
+      border-bottom: 0;
+    }
+    .news-title {
+      padding-bottom: 10rpx;
+      font-size: 32rpx;
+      line-height: 44rpx;
+      color: $black;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .image-box {
+      position: relative;
+      width: 100%;
+      height: 360rpx;
+      image {
+        width: 100%;
+        height: 100%;
+        border-radius: 6rpx;
+      }
+    }
+    .bottom-bar {
+      display: flex;
+      align-items: center;
+      padding: 20rpx 0;
+    }
+    .news-time {
+      flex: 1;
+      font-size: 24rpx;
+      color: $gray;
+    }
+    .news-tag {
+      display: flex;
+      text {
+        font-size: 20rpx;
+        color: #fff;
+        background: $mainColor;
+        padding: 0 10rpx;
+        margin-left: 20rpx;
+        border-radius: 4rpx;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class="news-card" @tap="routerTo({{mode.newsId}})">
+    <text class="news-title">{{mode.title}}</text>
+    <view class="image-box">
+      <image src="{{_httpImg}}{{mode.coverPic}}"></image>
+      <!-- <text>进行中</text> -->
+    </view>
+    <view class="bottom-bar">
+      <text class="news-time">{{mode.myTime}}</text>
+      <view class="news-tag">
+        <text>{{mode.sourceName}}</text>
+        <!-- <text>原创</text> -->
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class NewsCard extends wepy.component {
+    props = {
+      mode: {}
+    }
+    mixins = [tool, router]
+    methods = {
+      routerTo(val) {
+        this._goRouter('/pages/news/detail', {
+          id: val
+        })
+      }
+    }
+    onLoad() {}
+  }
+</script>

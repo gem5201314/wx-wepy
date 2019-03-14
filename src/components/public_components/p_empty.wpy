@@ -1,0 +1,62 @@
+<style lang="scss" scoped>
+  @import '../../scss/common';
+  .empty-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // height: 600rpx;
+    margin-bottom: 20rpx;
+    top: 0;
+    bottom: 300rpx;
+    left: 0;
+    right: 0;
+    &.relative {
+      position: initial;
+      margin-top: 200rpx;
+      margin-bottom:200rpx;
+    }
+    image {
+      height: 223rpx;
+      width: 288rpx;
+      margin-bottom: 20rpx;
+    }
+    text {
+      font-size: 30rpx;
+      margin-bottom: 10rpx;
+      color: $gray;
+    }
+  }
+</style>
+
+<template>
+  <!-- 空状态 -->
+  <view class="empty-container {{fixed ? '' : 'relative'}}">
+    <!-- <image src="{{image ? image : imageUrl + '/goods-miss.png'}}" /> -->
+    <text>{{title}}</text>
+    <text>{{subtitle}}</text>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Loading extends wepy.component {
+    props = {
+      fixed: {
+        default: true
+      },
+      image: {
+        default: ''
+      },
+      title: {
+        default: '这件商品不见啦！'
+      },
+      subtitle: {
+        default: '去逛逛其他商品吧'
+      }
+    };
+    methods = {};
+    onLoad() {}
+  }
+</script>

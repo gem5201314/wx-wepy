@@ -1,0 +1,138 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .loan-card-index {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    background: #fff;
+  }
+  .card{
+    .card-main{
+      display: flex;
+      width: 100%;
+      height: 190rpx;
+      overflow-x: hidden;
+      justify-content: space-around;
+      align-items: center;
+      padding: 20rpx;
+      padding-left: 0;
+      margin-left: 20rpx;
+      // border-bottom: 1rpx solid $borderColor;
+      box-sizing: border-box;
+      .left-img{
+        width: 220rpx;
+        height: 100%;
+        // border: 1px solid green;
+        box-sizing: border-box;
+        .img{
+          width: 220rpx;
+          height: 100%;
+          border-radius: 10rpx;
+          overflow: hidden;
+        }
+      }
+      .center-dis{
+        flex:1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 100%;
+        padding-left: 30rpx;
+        // border: 1px solid green;
+        box-sizing: border-box;
+        .top-text{
+          color: #444444;
+          font-size: 32rpx;
+          @include -text-overflow(1);
+        }
+        .bank{
+          color: #999999;
+          font-size: 24rpx;
+        }
+        .center-classfy{
+          color: #ffffff;
+          font-size: 20rpx;
+          display: flex;
+          .classfy-item{
+            display: inline;
+            padding-left: 15rpx;
+            padding-right: 15rpx;
+            padding-top: 5rpx;
+            padding-bottom: 5rpx;
+            border-radius: 6rpx;
+            margin-right: 20rpx;
+            overflow: hidden;
+            background: $mainColor;
+          }
+        }
+        .bottom-dis{
+          color: $mainColor;
+          font-size: 24rpx;
+          @include -text-overflow(1);
+        }
+      }
+      .right-icon{
+        width: 100rpx;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // border: 1px solid green;
+        box-sizing: border-box;
+        .img-icon{
+          width: 50rpx;
+          height: 50rpx;
+        }
+      }
+    }
+  }
+  .card-bottom{
+    width: 100%;
+    font-size: 24rpx;
+    color: #444444;
+    padding: 20rpx;
+    padding-top: 0;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <view class='loan-card-index'>
+    <view class="card">
+      <view class="card-main">
+          <view class="left-img">
+            <view class="img">
+              <image src="{{_img1}}"></image>
+            </view>
+          </view>
+          <view class="center-dis">
+            <view class="top-text">公积金贷款</view>
+            <view class="bank">上海银行</view>
+            <view class="center-classfy">
+              <view class="classfy-item">无限制行业</view>
+              <view class="classfy-item">迪丽热巴</view>
+            </view>
+            <view class="bottom-dis">月利率</view>
+          </view>
+      </view>
+      <view class="card-bottom">
+        <view class="item">22周岁~60周岁、连续工作满6个月、有近6个月流水</view>
+        <view class="item">额度范围：1.00~15.00万</view>
+        <view class="item">期限范围：12~36个月</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class LoanCard extends wepy.component {
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

@@ -1,0 +1,128 @@
+<style lang="scss" scoped>
+  $width:20%; //flex-item宽
+  $height:180rpx; //felx-item长
+  //图标
+  $img_width:90rpx;
+  $img_height:90rpx;
+  .nav-flex {
+    width: 100%;
+    height: auto;
+    background: #fff; 
+    // border: 1px solid red;
+    box-sizing: border-box;
+    .main {
+      display: flex;
+      flex-wrap: wrap;
+      .item {
+        width: $width;
+        height: $height;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; 
+        // border: 1px solid green;
+        box-sizing: border-box;
+        .img {
+          width: $img_width;
+          height: $img_height;
+          border-radius: 10rem; 
+          // border: 1px solid red;
+          overflow: hidden;
+          image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .text {
+          margin-top: 10rpx;
+          color: #444444;
+          font-size: 24rpx;
+        }
+      }
+    }
+  }
+</style>
+<template lang="wxml">
+  <view class="nav-flex">
+    <view class="main">
+      <view class="item" wx:for="{{navList}}" wx:key="{{index}}" @tap="routerGo({{item}})">
+        <view class="img">
+          <image class="img" src="{{_img1}}"></image>
+        </view>
+        <text class="text">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class NavFlex extends wepy.component {
+    components = {}
+    data = {
+      navList: [
+        {
+          name: '信用卡申请',
+          icon: '',
+          router: ''
+        },
+        {
+          name: '理财产品',
+          icon: '',
+          router: ''
+        },
+        {
+          name: '赎楼优惠',
+          icon: '',
+          router: '/pages/find/foreclosure_building'
+        },
+        {
+          name: '征信查询',
+          icon: '',
+          router: '/pages/find/find_social_security'
+        },
+        {
+          name: '房产查询',
+          icon: '',
+          router: '/pages/find/find_house_property'
+        },
+        {
+          name: '税费查询',
+          icon: '',
+          router: '/pages/find/find_taxation'
+        },
+        {
+          name: '评估报告',
+          icon: '',
+          router: ''
+        },
+        {
+          name: '公积金查询',
+          icon: '',
+          router: '/pages/find/find_accumulation_fund'
+        },
+        {
+          name: '办文查询',
+          icon: '',
+          router: ''
+        },
+        {
+          name: '民间信用',
+          icon: '',
+          router: ''
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      routerGo(item) {
+        if (!item.router) return 0
+        this._goRouter(item.router)
+      }
+    }
+    events = {}
+    onLoad() {}
+  }
+</script>

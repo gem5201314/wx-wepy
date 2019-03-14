@@ -1,0 +1,58 @@
+<template>
+</template>
+
+<script>
+//
+// 常用mixins函数封装
+//
+import wepy from 'wepy'
+export default class ToolMixin extends wepy.mixin {
+  data = {
+    _httpImg: '', // 图片URL前缀
+      // 测试图片数据
+    _img1: 'http://static.laoganbu.cn/409b70ba066d302ac050051629b6014a4253ed3e.jpg',
+    // 全局图标
+    _imgIconRight: '/image/public_components_icon/right.png', // 向右
+    _imgIconRightRgba: '/image/public_components_icon/arrow.png', // 向右白色
+    _imgIconDown: '/image/public_components_icon/down.png', // 向下
+    _imgIconUp: '/image/public_components_icon/up.png', // 向上
+    _imgIconYes: '/image/public_components_icon/yes.png', // 选中
+    _imgIconDate: '/image/public_components_icon/date.png', // 日期
+    _imgIconMoney: '/image/public_components_icon/money.png', // money ￥
+    _imgAddress: '/image/public_components_icon/address.png', // 定位
+    _imgSearch: '/image/public_components_icon/seach.png', // 定位
+
+    // 其他配置数据
+    _scrollTop: 0 // 滚动条距离顶部距离
+
+  }
+  methods = {
+
+  }
+  // 更新redux的值
+  _setRedux(strFn, data) { // strFn redux里的函数名  data需要更新的数据
+    wepy.$store.dispatch({ type: strFn, payload: data })
+  }
+  // 获取redux的值
+  _getRedux(key) { // key 变量名
+    return wepy.$store.getState().counter[key]
+  }
+  // 获取全局变量
+  _getGloabal(key) {
+    return wepy.$instance.globalData[key]
+  }
+  // 富文本组件方法回调
+  _richTextCall() {
+    this.$apply()
+    this.$invoke('Html2wxml', 'htmlParserNotice')
+  }
+  onLoad() {
+    this._httpImg = wepy.$appConfig.configData.imgHttpUrl // 配置图片URL前缀
+  }
+    // 页面滚动监听
+  onPageScroll(e) {
+    this._scrollTop = e.scrollTop
+  }
+}
+
+</script>

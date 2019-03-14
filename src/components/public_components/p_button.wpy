@@ -1,0 +1,101 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .p-button-index {
+    width: 100%;
+  }
+  .main {
+
+    .content {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      // height: 120rpx;
+      background: #fff;
+      padding-left: 30rpx;
+      padding-right: 30rpx;
+      padding-bottom: 20rpx;
+      padding-top: 20rpx;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-sizing: border-box;
+      .wx-button {
+        width: 100%;
+        background: $mainColor;
+        color: #fff;
+      }
+      .hover {
+        background: $mainColorRgba;
+      }
+    }
+  }
+  .agreement{
+    font-size: 24rpx;
+    color: #AAAAAA;
+    text{
+      color: #0060FF;
+    }
+  }
+</style>
+
+<template>
+  <view class='p-button-index'>
+    <view class="button">
+      <view class="botton-index">
+        <view class="main">
+          <view class="content">
+            <button class="wx-button" @tap="buttonClick" hover-class="hover">{{text}}</button>
+              <view class="agreement" wx:if="{{xy==='yes'}}">
+                点击申请,即表示我已阅读读并同意
+                <text wx:for="{{xyList}}" wx:key="{{index}}" @tap="xyRouter({{item}})">《{{item.name}}》</text>
+              </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class PButton extends wepy.component {
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    props={
+      text: {
+        default: '按钮'
+      },
+      xy: { // 是否带协议
+        default: 'no'
+      },
+      xyList: { // 协议列表
+        default: [
+          {
+            name: 'xxxxx协议',
+            url: ''
+          },
+          {
+            name: 'yyyyy协议',
+            url: ''
+          }
+        ]
+      }
+    }
+    methods = {
+      buttonClick(e) {
+        this.$emit('submit', e)
+      },
+      xyRouter(v) { // 协议跳转
+        if (v.url === '') {
+          console.log('-----------^^^^^------------没有哦URL')
+          return '邓紫棋'
+        }
+        this._goRouter(v.url)
+      }
+    }
+    onLoad() {}
+  }
+</script>

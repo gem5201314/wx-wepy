@@ -1,0 +1,119 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .select-house-property {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <!-- 自定义多功能职业选择器 -->
+  <view class='select-house-property'>
+    <HouseSelect text="房产类型" :array.sync="list" :model="house" @change.user="change"></HouseSelect>
+
+    <!-- 商铺 -->
+    <view wx:if="{{house.key==='shop'}}">
+        <ShopAge text="商铺年龄" :array="houseAgeList" :model="shopAge"></ShopAge>
+        <ShopMoney text="房产估值" :model="shopMoney"></ShopMoney>
+    </view>
+    <!-- 厂房 -->
+    <view wx:if="{{house.key==='factory'}}">
+        <FactoryMoney text="房产估值" :model="factoryMoney"></FactoryMoney>
+    </view>
+    <!-- 商用两住房 -->
+    <view wx:if="{{house.key==='both'}}">
+        <HouseAge text="房子年龄" :array="houseAgeList" :model="houesAge"></HouseAge>
+        <HouseMoney text="房产年龄" :model="houesMoney"></HouseMoney>
+    </view>
+    
+    <!-- 其他 -->
+    <view wx:if="{{house.key==='no'}}"></view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Select from '@/components/public_components/p_select' // 普通选择器
+  import Input from '@/components/public_components/p_input_left_text' // 普通输入框
+  import InputUnit from '@/components/public_components/p_input_left_text_unit' // 带单位输入框
+  import json from './house_json.js'
+  export default class SelectHouseProperty extends wepy.component {
+    constructor() {
+      super()
+      // 配置固定数据
+      this.data.list = json.list
+      this.data.houseAgeList = json.houseAge
+    }
+    components = {
+      HouseSelect: Select,
+      Input,
+      InputUnit,
+      // 商铺
+      ShopAge: Select, // 商铺年龄
+      ShopMoney: InputUnit, // 房产估值
+      // 厂房
+      FactoryMoney: InputUnit, // 总流水
+      // 商用两住房
+      HouseAge: Select, // 房产年龄
+      HouseMoney: InputUnit // 房产估值
+    }
+    data = {
+      house: '', // 房子
+       // 商铺
+      shopAge: '', // 商铺年龄
+      shopMoney: '', // 房产估值
+      // 厂房
+      factoryMoney: '', // 房产估值
+      // 商用两住房
+      houseAge: '', // 房产年龄
+      houseMoney: '', // 房产估值
+      //
+      houseAgeList: []
+    }
+    mixins = [tool, router]
+    methods = {
+      change(res) {
+        this.$apply()
+      }
+    }
+      // 数据构造 --->该函数给父组件调用
+    dataRest() {
+      let dataForm = {}
+      if (this.house.key === 'shop') {
+        dataForm = { // 构造数据
+          house: this.house,
+          shopAge: this.shopAge, // 商铺年龄
+          shopMoney: this.shopMoney // 房产估值
+        }
+      }
+      if (this.house.key === 'factory') {
+        dataForm = {
+          house: this.house,
+          factoryMoney: this.factoryMoney
+        }
+      }
+      if (this.house.key === 'both') {
+        dataForm = {
+          house: this.house,
+          houseAge: this.houseAge, // 房产年龄
+          houseMoney: this.houseMoney // 房产估值
+        }
+      }
+      if (this.house.key === 'no') {
+        dataForm = {
+          house: this.house
+        }
+      }
+      if (this.house.key === 'student') {
+        dataForm = {
+          house: this.house
+        }
+      }
+      return dataForm
+    }
+    onLoad() {}
+  }
+</script>

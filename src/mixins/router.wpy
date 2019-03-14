@@ -1,0 +1,102 @@
+<script>
+
+//
+// 常用mixins函数封装
+//
+import wepy from 'wepy'
+import Time from '@/utils/Time'
+export default class RouterMixin extends wepy.mixin {
+  data = {
+    _getRouterQuery: '', // 路由参数
+    _routerSetTime: 10, // 路由延迟时间
+    _userInfo: ''// 用户信息
+  }
+  methods = {
+       // 图片浏览 src图片路径
+    _toImgLook(src, httpUrl = '') {
+      let url = httpUrl + src
+      wx.previewImage({
+        urls: [url] // 需要预览的图片http链接列表
+      })
+    }
+  }
+  // 跳转新页面  val路径  query参数 参数为一个对象  type跳转类型 默认page
+  _goRouter(val, query = null, type = 'page') {
+    let url = ''
+    let newStr = ``
+    // 构造参数
+    if (query === null) {
+      url = val
+    }
+    if (query !== null) {
+      let str = ''
+      for (let v in query) {
+        str = str + `${v}=${query[v]}&`
+      }
+      newStr = `?${str.substring(0, str.length - 1)}` // 截取参数
+      url = val + newStr
+    }
+    if (type === 'page') { // 正常页面
+      setTimeout(() => {
+        wx.navigateTo({
+          url
+        })
+      }, this._routerSetTime)
+    }
+    if (type === 'tab') {  // 选项卡页面
+      setTimeout(() => {
+        wx.switchTab({
+          url: val
+        })
+      }, this._routerSetTime)
+    }
+    Time.clearTime()// 打开新页面，清除全局定时器
+  }
+  // 页面重定向
+  _reRouter(val, query = null) {
+    let url = ''
+    let newStr = ``
+    // 构造参数
+    if (query === null) {
+      url = val
+    }
+    if (query !== null) {
+      let str = ''
+      for (let v in query) {
+        str = str + `${v}=${query[v]}&`
+      }
+      newStr = `?${str.substring(0, str.length - 1)}` // 截取参数
+      url = val + newStr
+    }
+    setTimeout(() => {
+      wx.redirectTo({
+        url
+      })
+    }, this._routerSetTime)
+  }
+  // 页面返回
+  _backRouter(num = 1) {
+    setTimeout(() => {
+      wx.navigateBack({
+        delta: num
+      })
+    }, this._routerSetTime)
+  }
+
+  // 用户是否登录判断
+  _userIsLogin() {
+    return new Promise((resolve, reject) => {
+      if (this._userInfo === '') { // 跳转登录授权登录
+        this._goRouter('/pages/login')
+      }
+      if (this._userInfo !== '') {
+        resolve()
+      }
+    })
+  }
+  onLoad(data) {
+    this._getRouterQuery = data // 获取路由参数
+  }
+}
+
+</script>

@@ -1,0 +1,43 @@
+
+<style lang="scss">
+  .test-index{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+</style>
+<template>
+  <view class="test-index">
+      <view @tap="redux">redux测试</view>
+      <Tab></Tab>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+
+  import Tab from '@/components/public_components/p_tab'
+  export default class Test extends wepy.page {
+    config = {
+      navigationBarTitleText: '组件测试'
+    }
+    components = {
+      Tab
+    }
+    data = {}
+    mixins=[tool, router]
+    methods = {
+      // redux测试
+      redux() {
+        this._setRedux('TESTEDIT', {name: 'dengziqi'})
+        console.log('========>>>>>>>>>>>>>>>>>>>>>杨幂>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        console.log(this._getRedux('testData'))
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<杨幂<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<========')
+      }
+    }
+    onLoad() {}
+  }
+</script>

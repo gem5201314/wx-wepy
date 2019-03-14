@@ -1,0 +1,81 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.produce-info-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   padding-bottom: 200rpx;
+   box-sizing: border-box;
+}
+.to-top{
+  margin-top:20rpx
+}
+ .title-content{
+    width: 100%;
+    font-size: 24rpx;
+    color: #444444;
+    padding: 20rpx;
+    background: #ffffff;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <view class='produce-info-index'>
+    <ProduceHead></ProduceHead>
+    <Condtion class="to-top" title="申请条件">
+      <view class="title-content">
+        <view class="item" wx:for="1234" wx:key="{{index}}">{{item}}、23-55周岁、代发工资8000、信用良好 </view>
+      </view>
+    </Condtion>
+    <Stuff class="to-top" title="所需材料">
+      <view class="title-content">
+        <view class="item" wx:for="1234" wx:key="{{index}}">{{item}}、23-55周岁、代发工资8000、信用良好 </view>
+      </view>
+    </Stuff>
+    <Explain class="to-top" title="说明">
+      <view class="title-content">
+        <view class="item" wx:for="1234" wx:key="{{index}}">{{item}}、23-55周岁、代发工资8000、信用良好 </view>
+      </view>
+    </Explain>
+     <Step class="to-top" title="申请步骤">
+      <view class="title-content">
+        <view class="item">23-55周岁，代发工资8000、信用良好 </view>
+      </view>
+    </Step>
+
+  <FixButton text='立即申请' @submit.user="apply" ></FixButton>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import LeftTitle from '@/components/public_components/p_left_title' // 分类条
+  import ProduceHead from '@/components/home_comm/produce_info_head'
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class ProduceInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '产品详情'
+    }
+    components = {
+      Condtion: LeftTitle,
+      Stuff: LeftTitle,
+      Explain: LeftTitle,
+      Step: LeftTitle,
+      ProduceHead,
+      FixButton
+    }
+    data = {
+  
+    }
+    mixins = [tool, router]
+    methods = {
+      apply() {
+        this._goRouter('/pages/home/apply')
+      }
+    }
+    onLoad() {}
+  }
+</script>

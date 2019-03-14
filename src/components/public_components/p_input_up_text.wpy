@@ -1,0 +1,80 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .p_input_up_text {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .item-input {
+    .up-text {
+      margin-top: 30rpx;
+      font-size: 28rpx;
+      color: #AAAAAA;
+      padding-left: 30rpx;
+      box-sizing: border-box;
+    }
+    .down-input {
+      margin-top: 20rpx;
+      width: 100%;
+      height: 88rpx;
+      input {
+        height: 100%;
+        background: #ffffff;
+        padding-left: 30rpx;
+        border-bottom: 1rpx solid $borderColor;
+        box-sizing: border-box;
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='p_input_up_text'>
+    <view class="item-input">
+      <view class="up-text">{{text}}</view>
+      <view class="down-input">
+        <input 
+            placeholder-style="color: #AAAAAA;font-size: 32rpx;" 
+            value="{{model}}" 
+            placeholder="{{placeholder}}" 
+            maxlength="{{size}}" 
+            @input="change">></input>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class PInputUpText extends wepy.component {
+    components = {}
+    data = {}
+    props={
+      text: { // 左边名字
+        default: '输入框名字'
+      },
+      model: {// 动态绑定的值
+        default: '',
+        twoWay: true
+      },
+      placeholder: {
+        default: '请输入提示信息'
+      },
+      size: { // 输入框输入字符多少
+        default: 20
+      }
+  
+    }
+    mixins = [tool, router]
+    methods = {
+      change(e) {
+        this.model = e.detail.value
+        this.$apply()
+        this.$emit('change', this.model)
+      }
+    }
+    onLoad() {}
+  }
+</script>

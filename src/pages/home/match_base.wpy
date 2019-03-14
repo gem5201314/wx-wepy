@@ -1,0 +1,50 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.match-base-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='match-base-index'>
+    <InputName text='本人姓名' :model="name" placeholder="请输入姓名" size='4'></InputName>
+    <InputCode text='本人身份证号' :model="userCode" placeholder="请输入本人身份证" size='18'></InputCode>
+
+    <FixButton text="下一步" @submit.user="nextSub"></FixButton>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import InputLeftText from '@/components/public_components/p_input_left_text' // 输入框 左边文字
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class MatchBase extends wepy.page {
+    config = {
+      navigationBarTitleText: '基础信息'
+    }
+    components = {
+      InputName: InputLeftText,
+      InputCode: InputLeftText,
+      FixButton
+    }
+    data = {
+      name: '',
+      userCode: ''
+    }
+    mixins = [tool, router]
+    methods = {
+      nextSub() {
+        this._goRouter('/pages/home/match_aptitude')
+        console.log('========>>>>>>>>>>>>>>>>>>>>>杨幂>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        console.log(this.name)
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<杨幂<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<========')
+      }
+    }
+    onLoad() {}
+  }
+</script>

@@ -1,0 +1,47 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.person-data-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+.head-img{
+  width:50rpx;
+  height:50rpx;
+  border-radius: 50rpx;
+}
+</style>
+
+<template>
+  <view class='person-data-index'>
+    <Head imgIcon='no' text='头像'>
+         <image class="head-img" src="{{_img1}}"></image>
+    </Head>
+    <Nick imgIcon='no' text='昵称' rightText="爱你一万年" rightColor="#AAAAAA"></Nick>
+    <Name imgIcon='no' text='姓名' rightText="邓紫棋" rightColor="#AAAAAA"></Name>
+    <Age imgIcon='no' text='年龄' rightText="18" rightColor="#AAAAAA"></Age>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import TitleNav from '@/components/public_components/p_icon_nav' // 导航
+  export default class PersonData extends wepy.page {
+    config = {
+      navigationBarTitleText: '个人资料'
+    }
+    components = {
+      Head: TitleNav,
+      Nick: TitleNav,
+      Name: TitleNav,
+      Age: TitleNav
+    }
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

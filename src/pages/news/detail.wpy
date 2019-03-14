@@ -1,0 +1,305 @@
+<style lang="scss" scoped>
+  @import '../../scss/common';
+  .news-detail-page {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    .title { 
+      padding: 40rpx;
+      font-size: 34rpx;
+      line-height: 48rpx;
+      color: $black;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .news-info {
+      display: flex;
+      padding-left: 40rpx;
+      padding-right: 40rpx;
+        margin-bottom:20rpx;
+        box-sizing: border-box;
+      .news-time {
+        flex: 1;
+        font-size: 24rpx;
+        color: $gray;
+      }
+      .news-tag {
+        display: flex;
+      
+        text {
+          font-size: 20rpx;
+          color: #fff;
+          background: $mainColor;
+          padding: 0 10rpx;
+          margin-left: 20rpx;
+          border-radius: 4rpx;
+        }
+      }
+    }
+    .news-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 120rpx;
+      width: 100%;
+      background: #fff;
+      z-index: 100;
+      border: 1px solid $borderColor;
+      .bottom-item {
+        position: relative;
+        width:200rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        image {
+          width: 60rpx;
+          height: 60rpx;
+        }
+        text {
+          margin-top: 5rpx;
+          font-size: 24rpx;
+          color: #999999;
+        }
+        button{
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            border: none;
+        }
+
+        .badge {
+          top: 5rpx;
+          left:55px;
+          position: absolute;
+          border-radius: 20rpx;
+          background: #f12c20;
+          font-size: 24rpx;
+          color: #fff;
+          min-width:15rpx;
+          height:35rpx;
+          padding-left: 10rpx;
+          padding-right: 10rpx;
+          text-align:center;
+
+        }
+      }
+    }
+  }
+  // 
+  .news-content{
+    padding-bottom: 200rpx;
+    box-sizing: border-box;
+  }
+</style>
+
+<template>
+  <view class="news-detail-page">
+    <!-- 引入富文本样式 -->
+    <import src="../../components/wxparse/wxParse.wxml" />
+    <text class="title">{{newInfo.title}}</text>
+    <view class="news-info">
+      <text class="news-time">{{newInfo.myTime}}</text>
+      <view class="news-tag">
+        <text>{{newInfo.sourceName}}</text>
+        <!-- <text>原创</text> -->
+      </view>
+    </view>
+    <view class="news-content">
+        <Html2wxml :parserContent.sync="productDesc"></Html2wxml>
+    </view>
+    <!-- 底部 -->
+    <view class="news-bottom-bar">
+      <view class="bottom-item" @tap="like">
+        <image class="" src="{{_httpImg}}/ic-news-favorite.png" wx:if="{{_httpImg}}"/>
+        <text>点赞</text>
+        <view class="badge" wx:if="{{999>newInfo.likedCount+newInfo.virtualLiked&&newInfo.likedCount+newInfo.virtualLiked>0}}">{{newInfo.likedCount+newInfo.virtualLiked}}</view>
+         <view class="badge" wx:if="{{newInfo.likedCount+newInfo.virtualLiked>999}}">999+</view>
+      </view>
+      <view class="bottom-item" @tap="favor">
+        <image class="" src="{{_httpImg}}/ic-news-collect.png" wx:if="{{_httpImg}}"/>
+        <text>收藏</text>
+        <view class="badge" wx:if="{{newInfo.favoriteCount>0}}">{{newInfo.favoriteCount}}</view>
+      </view>
+      <view class="bottom-item" @tap="goComment">
+        <image class="" src="{{_httpImg}}/ic-news-comment.png" wx:if="{{_httpImg}}"/>
+        <text>评论</text>
+        <view class="badge" wx:if="{{999>newInfo.commentCount&&newInfo.commentCount>0}}">{{newInfo.commentCount}}</view>
+         <view class="badge" wx:if="{{newInfo.commentCount>999}}">999+</view>
+      </view>
+      <view class="bottom-item">
+        <image class="" src="{{_httpImg}}/ic-news-share.png" wx:if="{{_httpImg}}"/>
+        <text>分享</text>
+        <button plain open-type="share"  @tap="share"></button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Html2wxml from '@/components/wxparse/html2wxml'
+  import news from '@/api/news'
+  export default class NewsDetailPage extends wepy.page {
+    config = {
+      navigationBarTitleText: '资讯详情'
+    }
+    components={
+      Html2wxml
+    }
+    mixins = [tool, router]
+    data = {
+      newInfo: '',
+      productDesc: ''
+    }
+    methods = {
+      // 点赞
+      like() {
+        this.getIsLike()
+      },
+      // 收藏
+      favor() {
+        this.getIsFavor()
+      },
+      // 评论
+      goComment() {
+        this._goRouter('/pages/news/comment', this._getRouterQuery)
+      },
+      // 分享
+      share() {
+      }
+    }
+     // 分享 转发
+    onShareAppMessage(res) {
+      let title = '资讯' // 标题
+      let path = `/pages/news/detail?id=${this._getRouterQuery.id}&scene=${wepy.getStorageSync('pid')}_${wepy.getStorageSync('user').userId}` // 路径与参数
+      console.log('杨幂', path)
+      return {
+        title,
+        path,
+        success(res) {
+          console.log('成功', res)
+        }
+      }
+    }
+    // 检测是否点赞
+    async getIsLike() {
+      let query = {
+        sourceIds: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      let data = await news.isLike(query)
+      // 如果点赞数组为空 直接点赞
+      if (data.result.length === 0) {
+        this.addLikeHttp()
+        this.getLikeNum()
+      }
+      // 点赞数组不为空 判断该ID下是否已经点赞
+      if (data.result.length !== 0) {
+        if (data.result[this._getRouterQuery.id].result) {
+          this.delLikeHttp()
+          this.getLikeNum()
+        } else {
+          this.addLikeHttp()
+          this.getLikeNum()
+        }
+      }
+    }
+    // 取消点赞
+    async delLikeHttp() {
+      let query = {
+        sourceIds: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      news.delLike(query)
+    }
+    // 新增点赞
+    async addLikeHttp() {
+      let query = {
+        sourceId: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      news.addLike(query)
+    }
+    // 获取目标点赞数
+    async getLikeNum() {
+      let query = {
+        sourceIds: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      let data = await news.LikeNum(query)
+      this.newInfo.likedCount = data.count[this._getRouterQuery.id].count
+      this.$apply()
+    }
+
+    // 检测是否收藏
+    async getIsFavor() {
+      let query = {
+        sourceIds: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      let data = await news.isFavor(query)
+      // 如果点赞数组为空 直接点赞
+      if (data.length === 0) {
+        this.addFavorHttp()
+        this.getFavorNum()
+      }
+      // 收藏数组不为空 判断该ID下是否已经收藏
+      if (data.length !== 0) {
+        if (data[this._getRouterQuery.id].result) {
+          this.delFavorHttp()
+          this.getFavorNum()
+        } else {
+          this.addFavorHttp()
+          this.getFavorNum()
+        }
+      }
+    }
+    // 新增收藏
+    async addFavorHttp() {
+      let query = {
+        sourceId: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      news.addFavor(query)
+    }
+    // 取消收藏
+    async delFavorHttp() {
+      let query = {
+        sourceIds: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      news.delFavor(query)
+    }
+    // 获取收藏数
+    async getFavorNum() {
+      let query = {
+        sourceIds: this._getRouterQuery.id,
+        sourceType: 'news'
+      }
+      let data = await news.favorNum(query)
+      this.newInfo.favoriteCount = data[this._getRouterQuery.id].count
+      this.$apply()
+    }
+  
+    // 获取资讯详情
+    async getNewsInfo(id = null) {
+      if (!id) { this._backRouter() } // 没有ID 页面返回
+      this.newInfo = await news.newsInfo(id)
+      this.productDesc = this.newInfo.content
+      this._richTextCall()
+    }
+    onLoad() {
+      this.getNewsInfo(this._getRouterQuery.id)
+      // console.log('路由参数', this._getRouterQuery)
+    }
+  }
+</script>

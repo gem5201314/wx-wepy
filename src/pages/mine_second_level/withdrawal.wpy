@@ -1,0 +1,129 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.withdrawal-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+.pay{
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 80rpx;
+  margin-right: 20rpx;
+  overflow: hidden;
+}
+.tip{
+  .active-tip{
+    display: flex;
+    align-items: center;
+    height: 60rpx;
+    background: #FEFCEC;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    border-bottom: 1rpx solid $borderColor;
+    box-sizing: border-box;
+    .img{
+      width: 40rpx;
+      height: 40rpx;
+    } 
+    .content{
+      flex: 1;
+      padding-left: 5rpx;
+      padding-right: 5rpx;
+      font-size: 26rpx;
+      color: $mainColor;
+      box-sizing: border-box;
+    }
+  }
+}
+</style>
+
+<template>
+  <view class='withdrawal-index'>
+      <view class="tip" wx:if="{{!tipIsClose}}">
+        <view class="active-tip">
+          <view class="img">
+            <image src="/image/mine/Volume.png"></image>
+          </view>
+          <view class="content">
+            最低提现金额100元，每周提现一次，提现每周四处理
+          </view>
+          <view class="img" @tap="closeTip">
+            <image src="/image/mine/redus_close.png"></image>
+          </view>
+        </view>
+      </view>
+    <!--  -->
+      <Title slot="slot" text="支付方式">
+        <view class="pay">
+          <image src="{{_img1}}"></image>
+        </view>
+        支付宝
+      </Title>
+      <!--  -->
+      <Name text="真是姓名" placeholder="请输入真实姓名" :model="name"></Name>
+      <Account text="账号" placeholder="请输入支付宝账号" :model="account"></Account>
+      <Money text="提现金额" placeholder="请输入提现金额" :model="money"></Money>
+      <Tel text="手机号码" placeholder="请输入手机号码" :model="tel"></Tel>
+      <Code :tel.sync="tel"></Code> 
+      <!-- 提交 -->
+      <FixButton text="提现" @submit.user="submit"></FixButton>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import regForm from '@/mixins/reg_form'
+  import InputLeftText from '@/components/public_components/p_input_left_text' // 正常类型输入框
+  import InputSlot from '@/components/public_components/p_input_code_slot' // 插槽类型输入框
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class Withdrawal extends wepy.page {
+    config = {
+      navigationBarTitleText: '提现'
+    }
+    components = {
+      FixButton,
+      Title: InputSlot,
+      Code: InputSlot,
+      Name: InputLeftText,
+      Account: InputLeftText,
+      Money: InputLeftText,
+      Tel: InputLeftText
+    }
+    data = {
+      tipIsClose: false, // 是否关闭顶部通知
+      // 数据
+      name: '',
+      account: '',
+      money: '',
+      tel: ''
+    }
+    mixins = [ tool, router, regForm ]
+    methods = {
+      closeTip() { // 关闭通知
+        this.tipIsClose = true
+      },
+      async submit() { // 提交
+        let data = {
+          name: this.name,
+          account: this.account,
+          money: this.money,
+          tel: this.tel
+        }
+        let tip = new Map([
+          ['name', ['请输入规范姓名', '姓名']],
+          ['account', ['请输入正确账户', '非空']],
+          ['money', ['请输入正确金额', '非空']],
+          ['tel', ['请输入正确电话', '电话']],
+          ['securityCode', ['验证码格式错误', '验证码']]
+        ])
+        await this._formIsTrue(data, tip) // 表单验证
+        console.log('-----------^^^^^------------邓紫棋', data)
+      }
+    }
+    onLoad() {}
+  }
+</script>

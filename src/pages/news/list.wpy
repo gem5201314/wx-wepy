@@ -1,0 +1,88 @@
+
+<style lang="scss" scoped>
+  .news-page {
+    .news-list {
+      background: #fff;
+    }
+  }
+</style>
+
+<template>
+ <DownRefresh>
+  <view class="news-page">
+    <Tab :tabList.sync="tabList" fixed='yes' @tabChange.user="switchTab" key="name"></Tab>
+    <view class="news-list">
+      <repeat for="{{newsData}}" key="index" index="index" item="item">
+        <NewsCard :mode.sync="item" ></NewsCard>
+      </repeat>
+      <Empty wx:if="{{newsData.length===0}}" title="暂无资讯喔" subtitle="去看看其他页面吧"></Empty>
+    </view> 
+  </view>
+  </DownRefresh>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Tab from '@/components/public_components/p_tab'
+import DownRefresh from '@/components/public_components/p_down_refresh'
+import NewsCard from '@/components/news_comm/news_card'
+import tool from '@/mixins/tool'
+import router from '@/mixins/router'
+import Empty from '@/components/public_components/p_empty'
+import pagination from '@/mixins/pagination'
+import news from '@/api/news'
+export default class NewsPage extends wepy.page {
+  config = {
+    navigationBarTitleText: '资讯'
+  }
+  components = {
+    Tab,
+    NewsCard,
+    Empty,
+    DownRefresh
+  }
+  data = {
+    tabList: [], // 选项卡
+    selectedId: '', // 当前选择ID
+    page: '', // 分页数据
+    newsData: []// 资讯数据
+  }
+  methods = {
+    switchTab(tab) {
+      this.params(tab.selectedId)
+      this.getNewsList()
+    }
+  }
+  mixins = [tool, router, pagination]
+    // 获取资讯分类 选项卡
+  async getNewsType() {
+    let data = await news.newsTypelist()
+    this.tabList = data
+    this.selectedId = this.tabList[0].id
+    this.getNewsList()
+    this.$apply()
+  }
+    // 获取资讯
+  async getNewsList() {
+    this.page = await news.newsList()
+    await this.next()
+    this.newsData = this.page.list
+    this.$apply()
+  }
+    // 列表传参
+  params() { // 获取资讯的参数
+    return {
+      newsType: this.selectedId
+    }
+  }
+    // 到达底部
+  async onReachBottom () {
+    await this.next()
+    this.newsData = this.page.list
+    this.$apply()
+  }
+  onLoad() {
+    this.getNewsType()
+  }
+}
+</script>

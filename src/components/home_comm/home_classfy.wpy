@@ -1,0 +1,115 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .home-classfy {
+    width: 100%;
+    background: #fff;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .classfy-index{
+
+    .classfy-main{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      .classfy-item{
+        width: 50%;
+        height: 150rpx;
+        box-sizing: border-box;
+        border-top: 1rpx  solid $borderColor;
+        &:nth-child(1) {
+          border-top: none;
+        }
+        &:nth-child(2) {
+          border-top: none;
+        }
+        &:nth-child(2n-1) {
+          border-right: 1rpx  solid $borderColor;
+        }
+      }
+    }
+  }
+
+  .main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .left{
+      .img{
+        width: 90rpx;
+        height: 90rpx;
+        border-radius: 90rpx;
+        box-sizing: border-box;
+        overflow: hidden;
+        image{
+          width: 100%;
+          height: 100;
+        }
+      }
+    }
+    .right{
+      padding-left: 20rpx;
+      box-sizing: border-box;
+      .name{
+        width: 100%;
+        font-size: 30rpx;
+        color: #444444;
+        overflow: hidden;
+      }
+      .dis{
+        width: 100%;
+        font-size: 24rpx;
+        color:#A2A2A2;
+        overflow: hidden;
+      }
+    }
+  }
+  #a-0{
+    border-right:1rpx solid red;
+    border-bottom: 1px solid red;  
+  }
+  #a-1{
+    border-bottom: 1px solid red;  
+  }
+  #a-2{
+    border-left:1rpx solid red;
+  }
+</style>
+
+<template>
+  <view class='home-classfy'>
+    <view class="classfy-index">
+      <view class="classfy-main">
+        <view class="classfy-item" wx:for="1234" wx:key="{{index}}">
+          <view class="main" >
+            <view class="left">
+              <view class="img">
+                <image src="http://static.laoganbu.cn/409b70ba066d302ac050051629b6014a4253ed3e.jpg"></image>
+              </view>
+            </view>
+            <view class="right">
+              <view class="name">企业贷</view>
+              <view class="dis">最快三十分钟到账</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class ClassFy extends wepy.component {
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

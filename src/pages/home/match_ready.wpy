@@ -1,0 +1,50 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.match-ready-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='match-ready-index'>
+      <view class="main-content">
+          <LeftTitle title="必填信息">
+              <BaseInfo text="基本信息" rightText="已认证"></BaseInfo>
+              <Aptitude text="个人资质" rightText="已认证"></Aptitude>
+          </LeftTitle>
+          <!--  -->
+          <FixButton text="智能匹配" @submit.user="matching"></FixButton>
+      </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import LeftTitle from '@/components/public_components/p_left_title' // 分类条
+  import TitleNav from '@/components/public_components/p_icon_nav' // 导航
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class MatchReady extends wepy.page {
+    config = {
+      navigationBarTitleText: '智能匹配'
+    }
+    components = {
+      LeftTitle,
+      BaseInfo: TitleNav,
+      Aptitude: TitleNav,
+      FixButton
+    }
+    data = {}
+    mixins = [tool, router]
+    methods = {
+      matching() { // 智能匹配
+        this._goRouter('/pages/loan', '', 'tab')
+      }
+    }
+    onLoad() {}
+  }
+</script>

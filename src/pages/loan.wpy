@@ -1,0 +1,78 @@
+<style lang='scss' scoped>
+  @import '../scss/common';
+  .loan-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+  .fixed{
+    position: fixed;
+    width: 100%;
+    height: auto;
+  }
+  .content{
+    margin-top:180rpx;
+  }
+</style>
+
+<template>
+  <view class='loan-index'>
+    <TopCustom :city.sync="city" pageName="贷款"></TopCustom>
+    <view class="fixed">
+      <TabSearch @tabSearchChange.user="tabSearchChange"></TabSearch>
+      <SelectOptionThree></SelectOptionThree>
+    </view>
+    <!--  -->
+    <view class="content">
+       <LoanListPro wx:if="{{searchData.isSearch==='机构'}}"></LoanListPro>
+       <LoanListOrg wx:if="{{searchData.isSearch==='产品'}}"></LoanListOrg>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import TopCustom from '@/components/public_components/p_top_custom' // 头部自定义
+  import TabSearch from '@/components/loan_comm/loan_tab_search' // 选项卡带筛选
+  import SelectOptionThree from '@/components/loan_comm/loan_select_option_three' // 三级选择
+  import LoanListOrg from '@/components/loan_comm/loan_list_org' // 列表-机构
+  import LoanListPro from '@/components/loan_comm/loan_list_pro' // 列表-产品
+  export default class Loan extends wepy.page {
+    config = {
+      navigationStyle: 'custom'
+      // enablePullDownRefresh: true
+    }
+    components = {
+      TopCustom,
+      TabSearch,
+      SelectOptionThree,
+      LoanListOrg,
+      LoanListPro
+    }
+    data = {
+      searchData: {
+        id: 1,
+        isSearch: '机构'
+      }
+    }
+    mixins = [tool, router]
+    methods = {
+      tabSearchChange(data) {
+        this.searchData = data
+        console.log('========>>>>>>>>>>>>>>>>>>>>>杨幂>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        console.log(data)
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<杨幂<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<========')
+      }
+    }
+    computed={
+      city() {
+        return wepy.getStorageSync('city')
+      }
+    }
+    onLoad() {}
+  }
+</script>

@@ -1,0 +1,125 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .approve-user-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+  .one-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .top{
+      margin-top: 60rpx;
+      font-size: 28rpx;
+      color: #AAAAAA;
+      text-align: center;
+    }
+    .img-show-user{
+      margin-top: 60rpx;
+      width: 460rpx;
+      height: 290rpx;
+      overflow: hidden;
+      // border: 1px solid red;
+    }
+    .img-show-picture{
+      margin-top: 60rpx;
+      width: 460rpx;
+      height: 440rpx;
+      overflow: hidden;
+      // border: 1px solid red;
+    }
+  }
+</style>
+
+<template>
+  <view class='approve-user-index'>
+    <Step :currentIndex.sync="currentStep" :stepList="stepList">
+      <!-- 第一步 -->
+      <view class="step-one" wx:if="{{currentStep===1}}">
+        <view class="one-content">
+          <view class="top">拍摄/上传您的身份证</view>
+          <view class="img-show-user">
+            <image src="http://static.laoganbu.cn/c3f0a62e53ef28fa38d566a5811b98ae0bb55dd5.png"></image>
+          </view>
+           <view class="img-show-user">
+            <image src="http://static.laoganbu.cn/17a53ed939423a2414c19032aaf65337c983a3cf.png"></image>
+          </view>
+        </view>
+      </view>
+      <!-- 第二步 -->
+      <view class="step-two" wx:if="{{currentStep===2}}">
+         <view class="one-content">
+          <view class="top">将脸部置于提示框内并按提示做四个动作</view>
+          <view class="img-show-picture">
+            <image src="http://static.laoganbu.cn/560cb568cafa57e416de8bf443f7dad1805b7a77.png"></image>
+          </view>
+        </view>
+      </view>
+      <!-- 第三步 -->
+      <view class="step-three" wx:if="{{currentStep===3}}">
+        <Notice text="恭喜，认证成功！"></Notice>
+      </view>
+    </Step>
+    <FixButton :text.sync="buttonText" @submit.user="subStep"></FixButton>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  import Step from '@/components/public_components/p_step' // 步骤条
+  import Notice from '@/components/public_components/p_notice_status' // 通知
+  export default class ApproveUser extends wepy.page {
+    config = {
+      navigationBarTitleText: '身份认证'
+    }
+    components = {
+      FixButton,
+      Step,
+      Notice
+    }
+    data = {
+      buttonText: '下一步', // 按钮文字
+      currentStep: 1, // 当前步骤
+      stepList: [ // 步骤信息
+        {
+          id: 1,
+          name: '身份证认证'
+        },
+        {
+          id: 2,
+          name: '人脸识别'
+        },
+        {
+          id: 3,
+          name: '认证成功'
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      subStep() { // 步骤进度事件
+        if (this.currentStep === 1) {
+          this.buttonText = '下一步'
+        }
+        if (this.currentStep === 2) {
+          this.buttonText = '完成'
+        }
+        if (this.currentStep === 3) {
+          this.buttonText = '确定'
+          this._goRouter('/pages/mine/approve')
+        }
+        console.log('-----------^^^^^------------邓紫棋', this.currentStep)
+        this.currentStep = this.currentStep + 1
+        console.log('-----------^^^^^------------邓紫棋', this.currentStep)
+      }
+    }
+    onLoad() {}
+  }
+</script>

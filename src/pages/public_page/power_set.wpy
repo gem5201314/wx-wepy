@@ -1,0 +1,105 @@
+
+<style lang="scss" scoped>
+  @import '../../scss/common';
+  .index{
+    width: 100%;
+    height: auto;
+  }
+  .content{
+    // border: 1px solid red;
+    box-sizing: border-box;
+    .head-logo{
+      height: 500rpx;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      // border: 1px solid green;
+      .img{
+        width: 200rpx;
+        height: 200rpx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // border-radius: 200rpx;
+        // overflow: hidden;
+        icon{
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .title{
+        text-align: center;
+        color: #444444;
+      }
+    }
+    .text{
+      padding-left: 40rpx;
+      padding-right: 40rpx;
+      font-size: 28rpx;
+      text-align: center;
+      box-sizing: border-box;
+      color: #999999;
+    }
+    .button{
+      padding: 40rpx;
+      // border: 1px solid yellow;
+      box-sizing: border-box;
+      button{
+        background: $mainColor;
+      }
+    }
+  }
+
+</style>
+<template lang="wxml">
+    <view class="index"> 
+         <view class="content">
+           <view class="head-logo">
+              <view>
+                <view class="img">
+                    <image src="/image/public_components_icon/info_yes.png"></image>
+                 </view>
+                <view class="title">重新授权</view>
+              </view>
+           </view>
+           <view class="text">
+              <view>请你微信重新授权</view>
+              <view>感谢使用微信，谢谢你</view>
+           </view>
+           <view class="button" @tap="clickRouter">
+              <button type="primary">授权</button>
+           </view>
+         </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import tool from '@/mixins/tool'
+import router from '@/mixins/router'
+export default class GetPower extends wepy.page {
+  config = {
+    navigationBarTitleText: '授权'
+  }
+  components = {
+  };
+  data = {
+    nextRouter: ''// 前往下一个页面的路径值
+  };
+  mixins = [tool, router]
+  methods = {
+    clickRouter() {
+      console.log(this.nextRouter)
+      wx.openSetting()
+    }
+  }
+  events = {};
+  onLoad(data) {
+    // 获取下一个要跳转的页面地址
+    this.nextRouter = data.toUrl
+    this.$apply()
+  }
+}
+</script>

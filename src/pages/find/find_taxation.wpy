@@ -1,0 +1,31 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.find-taxation-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='find-taxation-index'>
+    税费查询
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class FindTaxation extends wepy.page {
+    config = {
+      navigationBarTitleText: '税费查询'
+    }
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

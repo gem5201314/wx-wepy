@@ -1,0 +1,68 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.collect-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='collect-index'>
+    <view class="main">
+      <Tab :tabList="tabList" @tabChange.user="tabChange"></Tab>
+      <!--  -->
+      <view class="tab-content">
+          <view class="produce" wx:if="{{selectItem==='产品'}}">
+             <SelectOptionThree></SelectOptionThree>
+             <LoanListPro></LoanListPro>
+          </view>
+          <view class="news" wx:if="{{selectItem==='资讯'}}">
+            资讯
+          </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Tab from '@/components/public_components/p_tab' // 选项卡
+  import SelectOptionThree from '@/components/loan_comm/loan_select_option_three' // 三级选择
+  import LoanListPro from '@/components/loan_comm/loan_list_pro' // 列表-产品
+  export default class Collect extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的收藏'
+    }
+    components = {
+      Tab,
+      SelectOptionThree,
+      LoanListPro
+    }
+    data = {
+      selectItem: '产品', // 选中
+      // 选项卡列表
+      tabList: [
+        {
+          id: 1,
+          text: '产品'
+        },
+        {
+          id: 1,
+          text: '资讯'
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      tabChange(val) {
+        console.log('-----------^^^^^------------邓紫棋', val)
+        this.selectItem = val.text
+      }
+    }
+    onLoad() {}
+  }
+</script>

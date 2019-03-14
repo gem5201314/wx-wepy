@@ -1,0 +1,320 @@
+<style lang="scss" scoped>
+ @import '../../scss/common';
+  .select {
+    width: 100%;
+    background: #ffffff;
+  }
+  .content {
+    box-sizing: border-box; // border: 1px solid red;
+    width: 100%;
+    background: #ffffff;
+    .row {
+      border-bottom: 1rpx solid $borderColor;
+      box-sizing: border-box;
+      width: 100%;
+      height: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .item {
+        border-right: 1rpx solid $borderColor;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30rpx;
+        line-height: 50rpx;
+        width: 30%;
+        box-sizing: border-box;
+        .font {
+          text-align: right;
+          text {
+            font-size: 28rpx;
+            color: #666666;
+          }
+        }
+        .img {
+          vertical-align: middle; // border: 1px solid #000;
+          margin-left: 10rpx;
+          width: 35rpx;
+          height: 35rpx;
+          image {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    } // 数据区域
+    .select-main {
+      margin-top: 0px;
+       //  border: 1px solid red;
+      height: 0;
+      width: 100%;
+      // padding-top: 20rpx;
+      box-sizing: border-box;
+      .main {
+        position: relative; // height: 200rem;
+        // border: 1px solid green;
+        // background: rgba(11,11,11,0);
+        box-sizing: border-box;
+        .data-item {
+          position: absolute;
+          width: 100%;
+          height: auto;
+          max-height: 12rem;
+          overflow: auto; // border: 1px solid  #e5e5e5;
+          // box-shadow: 1px 1px 1px 1px #e5e5e5;
+          box-shadow:0px 0px 1px 1px #e4e4e4;
+          // border:1px solid red;
+          background: #fff;
+          // border-radius: 10rpx;
+          padding: 20rpx;
+          box-sizing: border-box;
+          .list-item {
+            width: 100%;
+            font-size: 28rpx;
+            line-height: 28rpx;
+            padding: 30rpx;
+            overflow: hidden;
+            color: #444444;
+            text-align: left;
+            border-bottom: 1rpx solid #e5e5e5;
+            box-sizing: border-box;
+          }
+        }
+      }
+    }
+  }
+  #mian-hover{
+    height:2000rpx;
+    width:100%;
+    background:rgba(1,1,1,0.5);
+
+  }
+  #hide{
+    visibility:hidden;
+  }
+  #select {
+    color: #008aff;
+  }
+</style>
+<template>
+  <view class="select">
+    <view class="content">
+      <view class="row">
+        <view class="item" wx:for="{{title}}" wx:key="{{index}}" id="{{index==5?'no-border':''}}" @tap="titleClick({{item}})">
+          <view class="font">
+            <text wx:if="{{model[index]==''}}">{{item.text}}</text>
+            <text wx:if="{{model[index]!=''}}">{{model[index]['text']}}</text>
+          </view>
+          <view class="img">
+            <image wx:if="{{item.img=='down'}}" src="/image/public_components_icon/down.png"></image>
+            <image wx:if="{{item.img=='up'}}" src="/image/public_components_icon//up.png"></image>
+          </view>
+        </view>
+        <!-- 第三级固定 -->
+        <view class="item" @tap="toThreeSelect" style="border:none">
+          <view class="font">
+            <text>筛选</text>
+          </view>
+        </view>
+      </view>
+      <!-- 数据区域 -->
+      <view class="select-main">
+        <view class="main" id="{{isShowData?'mian-hover':''}}" @tap="close">
+          <view class="data-item" wx:for="{{title}}" wx:for-item="titleV" wx:for-index="titleI" wx:key="{{titleI}}" wx:if="{{titleV.img=='up'}}">
+            <view class="list-item" wx:for="{{titleV.data}}" wx:for-item="dataV" wx:for-index="dataI" wx:key="{{dataI}}" id="{{titleV['currentValue']['value']==dataV['value']?'select':''}}" @tap="itemSelect({{dataV}})">{{dataV.text}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class SelectOptionThree extends wepy.component {
+    components = {}
+    props = {
+      // 标题
+      selectTitle: {
+        default: ['金额', '期限']
+      },
+      // 选择的值
+      model: {
+        default: ['', ''],
+        twoWay: true
+      },
+      selectListA: { // 一级数据
+        default: [
+          {
+            text: '2000',
+            value: 'meinv'
+          },
+          {
+            text: '123123123',
+            value: 'nvren'
+          }
+        ]
+      },
+      selectListB: { // 二级数据
+        default: [
+          {
+            text: '邓紫棋',
+            value: 'dengziqi'
+          },
+          {
+            text: '杨幂',
+            value: 'yangmi'
+          }
+        ]
+      }
+    }
+    data = {
+      // 标题
+      title: [
+        {
+          id: 'A', // 标示
+          text: '类型', // 文字
+          img: 'down', // 图标状态 打开关闭
+          currentValue: '', // 该列表所选择的值
+          data: [] // 数据
+        },
+        {
+          id: 'B',
+          text: '科目',
+          img: 'down',
+          currentValue: '',
+          data: []
+        }
+      ],
+      // 显示数据列表的索引
+      dataSelect: 'A',
+      // 判断是否显示数据状态
+      isShowData: false
+    }
+    mixins = [tool, router]
+    methods = {
+      // 标题点击
+      titleClick(val) {
+        this.dataRest()
+        // 赋值当前选项
+        this.dataSelect = val['id']
+        let currentId = val['id'] // 当前下拉索引
+        // 判断hide show
+        this.title.map((v, i) => {
+          if (v.id === currentId) { // 是否为当前下拉索引
+            // 切换当前图标
+            this.title[i]['img'] = this.title[i]['img'] === 'up' ? 'down' : 'up'
+          }
+          if (v.id !== currentId) {
+            // 关闭其他图标
+            this.title[i]['img'] = 'down'
+          }
+        })
+        this.isShowDataMain()
+        this.$apply()
+      },
+      // 数据选择
+      itemSelect(val) {
+        let currentData = val // 所选择的数据
+        let index = this.dataSelect// 当前标题索引
+        // 遍历数据
+        this.title.map((vt, it) => {
+          if (vt['id'] === index) { // 当标题索引相等
+            vt['currentValue'] = currentData// 赋值
+            // console.log('当前-------》', vt, vt['currentValue'])
+          }
+        })
+        // 四级联动
+        switch (index) {
+          case 'A':
+            this.title[1]['currentValue'] = ''
+            break
+          case 'B':
+            break
+        }
+        // 赋值显示
+        for (let i = 0; i < this.title.length; i++) {
+          this.model[i] = this.title[i]['currentValue']
+        }
+        // 关闭所有图标
+        this.title.map((v, i) => {
+          v['img'] = 'down'
+        })
+        this.isShowDataMain()
+        // 传递事件
+        console.log('-----------^^^^^------------邓紫棋', this.model)
+        this.$emit('selectChange', this.model)
+      },
+      // 关闭所有
+      close() {
+        this.closeSelect()
+        this.isShowDataMain()
+      },
+      // 前往三级选择
+      toThreeSelect() {
+        this._goRouter('/pages/public_page/three_select_filter')
+      }
+    }
+    events = {
+    }
+    // 关闭所有下拉
+    closeSelect() {
+      this.title.map((v, i) => {
+        v.img = 'down'
+      })
+      this.$apply()
+    }
+    watch={
+      selectListA() {
+        this.dataRest()
+      },
+      selectListB() {
+        this.dataRest()
+      },
+      selectListC() {
+        this.dataRest()
+      },
+      model() { // 最多显示8个字符
+        this.model.map((v, i) => {
+          if (v !== '') {
+            if (v.text.length > 2) {
+              this.model[i].text = `${v.text.slice(0, 8)}..`
+            }
+          }
+        })
+      }
+    }
+    // 构造数据
+    dataRest() {
+      //
+      let selectTitle = this.selectTitle
+      let A = this.selectListA
+      let B = this.selectListB
+      let dataList = [A, B]
+      let dataSelectTitle = ['A', 'B']
+      this.title.map((val, index) => {
+        // 赋值标题
+        val['text'] = selectTitle[index]
+        // 赋值数据
+        val['data'] = []
+        dataList[index].map((vD, iD) => {
+          val['data'].push({ // 数据合并
+            ...vD,
+            select: dataSelectTitle[index],
+            checked: false
+          })
+        })
+      })
+      this.$apply()
+    }
+    // 判断是否显示数据状态
+    isShowDataMain() {
+      this.isShowData = this.title.some((val) => {
+        return val.img === 'up'
+      })
+    }
+  }
+</script>

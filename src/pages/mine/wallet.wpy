@@ -1,0 +1,66 @@
+
+<style lang="scss" scoped>
+  @import '../../scss/common.scss';
+  .my-wallet {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+    .able {
+      width: 100%;
+      height: 250rpx;
+      background-color: #fff;
+      padding: 40rpx 30rpx;
+      box-sizing: border-box;
+      margin-bottom: 30rpx;
+      .balance {
+        font-size: 32rpx;
+      }
+      .number {
+        font-size: 82rpx;
+        margin-top: 10rpx;
+      }
+    }
+    .choose {
+      background-color: #fff;
+      height: 176rpx;
+    }
+  } 
+</style>
+
+<template>
+  <view class="my-wallet">
+    <view class="able">
+      <view class="balance">可用余额(元)</view>
+      <view class="number">0.00</view>
+    </view>
+    <view class="choose">
+        <Detial imgIcon="no" text="明细" url="/pages/mine_second_level/detial"></Detial>
+        <Withdrawal imgIcon="no" text="提现" url="/pages/mine_second_level/withdrawal"></Withdrawal>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import TitleNav from '@/components/public_components/p_icon_nav' // 导航
+  export default class MyWallet extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的钱包'
+    }
+    components = {
+      Detial: TitleNav,
+      Withdrawal: TitleNav
+    }
+    mixins = [tool, router]
+    data = {
+      wallet: {}
+    }
+    onLoad() {
+    }
+    methods = {}
+  }
+</script>

@@ -1,0 +1,58 @@
+<style lang='scss' scoped>
+@import '../scss/common';
+.activity-index{
+ width: 100%;
+ height: 100%;
+ overflow-x: hidden;
+ background-color: $bgColor;
+ box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='activity-index'>
+    <Tab :tabList="tabList"  key="name" fixed='yes' @tabChange.user="tabChange"></Tab>
+    <List></List>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Tab from '@/components/public_components/p_tab' // 选项卡
+  import List from '@/components/activity_comm/activity_list' // 列表
+  export default class Activity extends wepy.page {
+    config = {
+      navigationBarTitleText: '活动'
+    }
+    components = {
+      Tab,
+      List
+    }
+    data = {
+      tabList: [
+        {
+          id: 1,
+          name: '推荐'
+        },
+        {
+          id: 1,
+          name: '最新'
+        },
+        {
+          id: 1,
+          name: '全部'
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      tabChange(v) {
+        console.log('========>>>>>>>>>>>>>>>>>>>>>杨幂>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        console.log(v)
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<杨幂<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<========')
+      }
+    }
+    onLoad() {}
+  }
+</script>

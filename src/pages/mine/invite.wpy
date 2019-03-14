@@ -1,0 +1,31 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.invit-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='invit-index'>
+      邀请
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class Invite extends wepy.page {
+    config = {
+      navigationBarTitleText: '邀请'
+    }
+    components = {}
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

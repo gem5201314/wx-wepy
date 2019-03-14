@@ -1,0 +1,33 @@
+<script>
+
+//
+// toast弹框 页面使用需要引入组件   import Toast from 'wepy-com-toast'
+//
+import wepy from 'wepy'
+import Toast from 'wepy-com-toast'
+export default class toastMixin extends wepy.mixin {
+  data = {
+    mixin: 'This is mixin data.'
+  }
+  comsponents={
+    Toast
+  }
+  methods = {
+
+  }
+  _toastShow(title = '标题', img = 'https://raw.githubusercontent.com/kiinlam/wetoast/master/images/star.png') { // 调用 toast title img
+    let promise = this.$invoke('toast', 'show', {
+      title,
+      img
+    })
+    promise.then((d) => {
+      console.log('toast done')
+    })
+  }
+  // 周期
+  onShow() {
+    console.log('mixin onShow')
+  }
+}
+
+</script>

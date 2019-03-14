@@ -1,0 +1,83 @@
+
+<style lang="scss" scoped>
+    @import '../../scss/common.scss';
+    .billing-details {
+        height: 100%;
+        background-color:$bgColor;
+        width: 100%; 
+        .content {
+            display: flex;
+            justify-content: space-between;
+            padding: 0rpx 35rpx;
+            height: 155rpx;
+            border-bottom: 1px solid $borderColor;
+            line-height: 155rpx;
+            .left {
+                margin-top: 22rpx;
+                line-height: 45rpx;
+                .due-to {
+                    font-size: 36rpx;
+                }
+                .instructions {
+                    font-size: 30rpx;
+                    color: #999999;
+                }
+                .time {
+                    font-size: 30rpx;
+                    color: #999999;
+                }
+            }
+            .introduce {
+                color: #ffa300;
+            }
+        }
+    }
+</style>
+<template>
+    <view class="billing-details">
+        <!-- <empty wx:if="{{turnoverList.length===0}}" title="暂无记录" subtitle="去看看其他页面吧"></empty> -->
+        <view class="content" wx:for="{{turnoverList}}" wx:key="{{index}}">
+            <view class="left">
+                <view class="due-to" wx:if="{{item.type==1}}">转账</view>
+                <view class="due-to" wx:if="{{item.type==2}}">交易</view>
+                <view class="due-to" wx:if="{{item.type==3}}">提现</view>
+                <view class="instructions">{{item.remarks}}</view>
+                <view class="time">{{item.creationTime}}</view>
+            </view>
+            <view class="right" wx:if="{{item.income}}"  style="color:green">+{{item.amounts}}</view>
+            <view class="right" wx:if="{{!item.income}}"  style="color:red">-{{item.amounts}}</view>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    // import wallet from '@/api/wallet'
+    // import empty from '@/components/common/empty'
+    export default class BillingDetails extends wepy.page {
+      config = {
+        navigationBarTitleText: '明细'
+      }
+      data = {
+        turnoverList: []
+      }
+    
+      components = {
+        // empty
+      }
+      // 获取流水
+      // async getMoneyTurnover() {
+      //   let query = {
+      //     page: 1,
+      //     perPage: 10
+      //   }
+      //   let data = await wallet.walletTurnover(query)
+      //   console.log('获取的数据', data)
+      //   this.turnoverList = data.list
+      //   this.$apply()
+      // }
+      onLoad() {
+        // this.getMoneyTurnover()
+      }
+      methods = {}
+    }
+</script>

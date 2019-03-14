@@ -1,0 +1,138 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .apply-step-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    padding-bottom: 200rpx;
+    box-sizing: border-box;
+  }
+</style>
+ 
+<template>
+  <view class='apply-step-index'>
+    <Step :currentIndex.sync="currentStep" :stepList="stepList">
+      <!-- 第一步 -->
+      <view class="step-one" wx:if="{{currentStep===1}}">
+            <RealName text="真实姓名" :model="realName"></RealName>
+            <Age text="年龄" :model="age"></Age>
+            <SelectCity text="所在城市" marginTop="30"  :model="city"></SelectCity>
+            <Occupation></Occupation>
+            <Tel text="手机号码" marginTop="30" :model="tel"></Tel>
+            <InputCode :tel.sync="tel"></InputCode>
+      </view>
+      <!-- 第二步 -->
+      <view class="step-two" wx:if="{{currentStep===2}}">
+            <Funds :model="funds" text="是否有本地公积金" ifYes="公积金连续缴存时间(月)"></Funds>
+            <SocialSecurity :model="socialSecurity" text="是否有本地社保" ifYes="社保连续缴存时间(月)"></SocialSecurity>
+            <House></House>
+            <Car text="是否有车"></Car>
+            <Credit text="信用情况"></Credit>
+      </view>
+      <!-- 第三步 -->
+      <view class="step-three" wx:if="{{currentStep===3}}">
+            <Notice text="恭喜，申请成功！"></Notice>
+      </view>
+      <FixButton :text.sync="buttonText" @submit.user="subStep"></FixButton>
+    </Step>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import Step from '@/components/public_components/p_step' // 步骤条
+  import SelectCity from '@/components/label/select_city' // 城市选择器
+  import Occupation from '@/components/label/select_occupation_auto' // 职业
+  import SocialSecurityFunds from '@/components/label/social_security_funds' // 公积金 社保
+  import Select from '@/components/public_components/p_select' // 普通选择器
+  import House from '@/components/label/select_house_property' // 房子
+  import InputAuto from '@/components/public_components/p_input_left_text' // 左边文字的普通输入框
+  import InputCode from '@/components/public_components/p_input_code_slot' // 验证码
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  import Notice from '@/components/public_components/p_notice_status' // 通知
+  export default class ApplyStep extends wepy.page {
+    config = {
+      navigationBarTitleText: '申请'
+    }
+    components = {
+      Step,
+      FixButton,
+      InputCode,
+      SelectCity,
+      Occupation,
+      Notice,
+      House,
+      Car: Select, // 车
+      Credit: Select, // 信用情况
+      Funds: SocialSecurityFunds, // 公积金
+      SocialSecurity: SocialSecurityFunds, // 社保
+      RealName: InputAuto,
+      Age: InputAuto,
+      Tel: InputAuto
+
+    }
+    data = {
+      // 数据
+      realName: '',
+      age: '',
+      city: '',
+      tel: '',
+      //
+      funds: '', // 公积金
+      socialSecurity: '', // 社保
+      //
+      buttonText: '下一步', // 按钮文字
+      currentStep: 1, // 当前步骤
+      stepList: [ // 步骤信息
+        {
+          id: 1,
+          name: '基本信息'
+        },
+        {
+          id: 2,
+          name: '资产信用'
+        },
+        {
+          id: 3,
+          name: '信息补充'
+        }
+      ]
+    }
+    mixins = [tool, router]
+    methods = {
+      subStep() { // 步骤进度事件
+        let dataForA = { // 第一步数据
+          realName: this.realName,
+          age: this.age,
+          city: this.city,
+          tel: this.tel,
+          ...this.$invoke('Occupation', 'dataRest') // 职业组件数据
+        }
+        let dataForB = {// 第二步数据
+          funds: this.funds,
+          socialSecurity: this.socialSecurity,
+          ...this.$invoke('House', 'dataRest') // 房子组件数据
+        }
+  
+        console.log('-----------^^^^^------------邓紫棋', dataForA, dataForB)
+        if (this.currentStep === 1) {
+          this.buttonText = '下一步'
+        }
+        if (this.currentStep === 2) {
+          this.buttonText = '完成'
+        }
+        if (this.currentStep === 3) {
+          this.buttonText = '确定'
+          this._goRouter('/pages/home', {}, 'tab')
+        }
+        console.log('-----------^^^^^------------邓紫棋', this.currentStep)
+        this.currentStep = this.currentStep + 1
+        console.log('-----------^^^^^------------邓紫棋', this.currentStep)
+      }
+    }
+    onLoad() {}
+  }
+</script>

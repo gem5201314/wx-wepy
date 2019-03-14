@@ -1,0 +1,85 @@
+<style lang="scss">
+  @import "./wxParse.wxss";
+  .wxParse-img {
+    margin: 0 auto;
+    width: 100%;
+    min-height: 200rpx;
+    display: block;
+    background-color: transparent;
+  }
+  .wxParse-p {
+    padding: 0rpx 40rpx;
+
+  }
+  .wxParse-inline {  // 这个样式会改变富文本样式，暂时注释掉
+    // font-size: 24rpx;
+    // line-height: 46rpx;
+    // padding: 0rpx 40rpx;
+    // color: $black;
+  }
+</style>
+
+<template>
+  <block wx:for="{{htmlParserTpl.nodes}}" wx:key="{{index}}">
+    <template is="wxParse0" data="{{item}}" />
+  </block>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import WxParse from './wxParse'
+  export default class html2wxml extends wepy.component {
+    props = {
+      parserName: {
+        type: String,
+        default: 'htmlParserName'
+      },
+      parserContent: {
+        type: String,
+        default: ''
+      },
+      parserType: {
+        type: String,
+        default: 'html'
+      },
+      parserPadding: {
+        type: Number,
+        default: 0
+      }
+    }
+    data = {
+      htmlParserTpl: {}
+    }
+    events = {
+      'htmlParser-broadcast': ($event, ...args) => {}
+    }
+    methods = {
+      htmlParserNotice() {
+        console.log('htmlParsehtmlParse', this.parserContent)
+        this.htmlParse()
+      }
+    }
+    async onLoad() {
+      this.htmlParse()
+    }
+    wxParseImgLoad(image) {
+      // let imgInfo = image.detail
+    }
+    htmlParse() {
+      /**
+       * WxParse.wxParse(bindName , type, data, target,imagePadding)
+       * 1.bindName绑定的数据名(必填)
+       * 2.type可以为html或者md(必填)
+       * 3.data为传入的具体数据(必填)
+       * 4.target为Page对象,一般为this(必填)
+       * 5.imagePadding为当图片自适应是左右的单一padding(默认为0,可选)
+       */
+      try {
+        let htmlContent = WxParse.wxParse(this.parserName, this.parserType, this.parserContent || this.props.parserContent.default, this, this.parserPadding)
+        this.htmlParserTpl = htmlContent[this.parserName]
+      } catch (e) {
+        console.warn('kinerHtmlParser:', '没有任何内容需要转换', e)
+      }
+    }
+  }
+</script>

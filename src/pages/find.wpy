@@ -1,0 +1,48 @@
+<style lang='scss' scoped>
+  @import '../scss/common';
+  .find-index {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: $bgColor;
+    box-sizing: border-box;
+  }
+  .main{
+    margin-top: 20rpx;
+  }
+</style>
+ 
+<template>
+  <view class='find-index'>
+    <NavFlex></NavFlex>
+    <!-- 推荐资讯 -->
+    <view class="main">
+       <LeftTitle title='推荐资讯' navText='更多' url="/pages/news/list">
+          <News></News>
+       </LeftTitle>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import NavFlex from '@/components/find_comm/find_flex_nav' // 导航
+  import LeftTitle from '@/components/public_components/p_left_title' // 分类条
+  import News from '@/components/find_comm/find_new_list' // 列表
+  export default class Find extends wepy.page {
+    config = {
+      navigationBarTitleText: '发现'
+    }
+    components = {
+      NavFlex,
+      LeftTitle,
+      News
+    }
+    data = {}
+    mixins = [tool, router]
+    methods = {}
+    onLoad() {}
+  }
+</script>

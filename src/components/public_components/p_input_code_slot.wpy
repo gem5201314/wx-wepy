@@ -1,0 +1,145 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .p-input-tel-code {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .main {
+    padding-left: 30rpx;
+    background: #fff;
+    box-sizing: border-box;
+    .content {
+      width: 100%; // height: 90rpx;
+      display: flex;
+      align-items: center;
+      border-bottom: 1rpx solid $borderColor;
+      padding-right: 20rpx;
+      box-sizing: border-box;
+      padding-top: 20rpx;
+      padding-bottom: 20rpx;
+      .left {
+        flex: 1;
+        font-size: 32rpx;
+        color: #3F3F3F; // border: 1px solid green;
+        box-sizing: border-box;
+      }
+      .right {
+        display: flex;
+        align-items: center;
+        // border: 1px solid green;
+        width: 475rpx;
+        input {
+          font-size: 32rpx;
+          color: #3F3F3F;
+        }
+       .button{
+         width: 200rpx;
+         height: 60rpx;
+         color: $mainColor;
+         font-size: 28rpx;
+         line-height: 60rpx;
+         text-align: center;
+         border: 1px solid $mainColor;
+         border-radius: 10rpx;
+       }
+       #disb{
+         border: 1px solid solid $mainColorRgba;
+         color: $mainColorRgba;
+       }
+      }
+    }
+  }
+</style>
+
+<template>
+  <view class='p-input-tel-code'>
+    <view class="left-text">
+      <view class="main">
+        <view class="content">
+          <view class="left">{{text}}</view>
+          <view class="right" wx:if="{{slot==='slot'}}">
+            <!--插槽 -->
+            <slot></slot>
+          </view>
+          <view class="right" wx:if="{{slot==='code'}}">
+            <input placeholder-style="color: #AAAAAA;font-size: 32rpx;" value="{{model}}" placeholder="{{placeholder}}" maxlength="{{size}}" @input="change"></input>
+            <view class="button" wx:if="{{!isDisbled}}" @tap="getCode">获取验证码</view>
+            <view class="button" id="disb" wx:if="{{isDisbled}}">{{buttonText}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import regForm from '@/mixins/reg_form'
+  import Time from '@/utils/Time'
+  export default class PInputTelCode extends wepy.component {
+    components = {}
+    data = {
+      time: 60, // 倒计时时间
+      isDisbled: false, // 按钮是否处于禁用状态
+      buttonText: '获取验证码'
+    }
+    props = {
+      text: { // 左边名字
+        default: '输入验证码'
+      },
+      model: { // 动态绑定的值
+        default: '',
+        twoWay: true
+      },
+      placeholder: {
+        default: '请输入验证码'
+      },
+      tel: { // 用于验证的手机号码
+        default: ''
+      },
+      size: { // 输入框输入字符多少
+        default: 6
+      },
+      slot: { // 自定义插槽 当值为slot时为自定义插槽 为code时为验证码
+        default: 'code'
+      }
+    }
+    mixins = [tool, router, regForm]
+    methods = {
+      change(e) {
+        this.model = e.detail.value
+        this.$apply()
+        this.$emit('change', this.model)
+      },
+      // 获取验证码
+      getCode() {
+        let data = {
+          tel: this.tel
+        }
+        let tip = new Map([
+           ['tel', [ '请输入正确手机号', '电话' ]]
+        ])
+        // 验证
+        this._formIsTrue(data, tip).then(res => {
+          Time.downTime(this.time, (res) => {
+            let stateTime = res.slice(3)
+            if (stateTime === '00') {
+              Time.clearTime()
+              this.isDisbled = false
+            }
+            if (stateTime !== '00') {
+              this.isDisbled = true
+              this.buttonText = `${stateTime}s后获取`
+            }
+            console.log('-----------^^^^^------------邓紫棋', stateTime)
+            this.$apply()
+          })
+        })
+      }
+    }
+    onLoad() {}
+  }
+</script>

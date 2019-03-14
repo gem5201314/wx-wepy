@@ -1,0 +1,117 @@
+<style lang='scss' scoped>
+  @import '../../scss/common';
+  .p-tab {
+    width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .main {
+    width: 100%;
+    height: 88rpx;
+    background: #910A84;
+    z-index: 2000;
+    .tab {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: space-around;
+      align-items: center;
+      .item {
+        width: auto;
+        height: 100%;
+        display: flex; 
+        // border: 1px solid green;
+        box-sizing: border-box;
+        justify-content: flex-end;
+        align-items: center;
+        .item-border {
+          width: auto;
+          text-align: center;
+          padding-bottom: 10rpx;
+          border-bottom: 6rpx solid rgba(1,1,1,0);
+          box-sizing: border-box;
+          text {
+            font-size: 28rpx;
+            color: rgba(253, 253, 253, 0.42);
+          }
+        }
+      }
+    }
+    #border-tab {
+      border-bottom: 6rpx solid #fff;
+      text{
+         color: #fff;
+      }
+    }
+  } 
+  .tab-index{
+      width: 100%;
+      height: 88rpx;
+    }
+</style>
+
+<template>
+  <view class='p-tab'>
+    <view class="tab-index" >
+      <view class="main" style="{{fixed==='yes'?'position: fixed':''}}"> 
+        <view class="tab">
+          <view class="item" wx:for="{{tabList}}" wx:key="{{index}}" @tap="tabSelect({{item}},{{index}})">
+            <view class="item-border" id="{{tabIsSelect===index?'border-tab':''}}">
+              <text>{{item[key]}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  export default class PTabSearch extends wepy.component {
+    components = {}
+    data = {
+  
+    }
+    props = {
+      fixed: { // 是否固定选项卡
+        default: 'no'
+      },
+      key: { // 选项卡显示字段的key
+        default: 'text'
+      },
+      tabList: { // 选项卡列表
+        default: [
+          {
+            id: 1,
+            text: '杨幂'
+          },
+          {
+            id: 2,
+            text: '邓紫棋'
+          },
+          {
+            id: 2,
+            text: '张碧晨'
+          }
+        ]
+      },
+      tabIsSelect: { // 默认选中第一项
+        default: 0
+      }
+    }
+    mixins = [tool, router]
+    methods = {
+      tabSelect(item, index) { // 选项卡
+        this.tabIsSelect = index
+        let data = {
+          ...item
+        }
+        this.$emit('tabChange', data)
+      }
+    }
+    onLoad() {}
+  }
+</script>

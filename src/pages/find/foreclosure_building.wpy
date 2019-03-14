@@ -1,0 +1,99 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.foreclosure-building-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   box-sizing: border-box;
+}
+</style>
+
+<template>
+  <view class='foreclosure-building-index'>
+   <view class="content">
+     <HouseCardNumber text="房产证号" :model="houseCardNumber"></HouseCardNumber>
+      <VillageName text="小区名称" :model="villageName"></VillageName>
+       <AcreageArea text="房子面积" :model="acreageArea"></AcreageArea>
+
+        <AgoLoan text="原贷余额" marginTop="30" :model="agoLoan" unit="万元"></AgoLoan>
+        <HousePrice text="售房价格" :model="housePrice" unit="万元"></HousePrice>
+        <ApplyMoney text="申请用款金额" :model="applyMoney" unit="万元"></ApplyMoney>
+        <BorrowTime text="借款期限" :model="borrowTime" unit="天"></BorrowTime>
+
+        <BorrowName text="借款人" marginTop="30" :model="borrowName"></BorrowName>
+        <Tel text="联系电话" :model="tel"></Tel>
+         <FixButton text="确定" @submit.user="submit"></FixButton>
+   </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import InputAuto from '@/components/public_components/p_input_left_text' // 左边文字的普通输入框
+  import InputUnit from '@/components/public_components/p_input_left_text_unit' // 带单位输入框
+  import regForm from '@/mixins/reg_form'
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class ForeclosureBuilding extends wepy.page {
+    config = {
+      navigationBarTitleText: '赎楼'
+    }
+    components = {
+      FixButton,
+      HouseCardNumber: InputAuto, // 房产证号
+      VillageName: InputAuto, // 小区名
+      AcreageArea: InputAuto, // 房子面积
+      AgoLoan: InputUnit, // 原贷余额
+      HousePrice: InputUnit, // 售房价格
+      ApplyMoney: InputUnit, // 申请用款
+      BorrowTime: InputUnit, // 借款期限
+      BorrowName: InputAuto, // 借款人
+      Tel: InputAuto // 联系电话
+    }
+    data = {
+      // 数据
+      houseCardNumber: '', // 房产证号
+      villageName: '', // 小区名
+      acreageArea: '', // 房子面积
+      agoLoan: '', // 原贷余额
+      housePrice: '', // 售房价格
+      applyMoney: '', // 申请用款
+      borrowTime: '', // 借款期限
+      borrowName: '', // 借款人
+      tel: '' // 联系电话
+    }
+    mixins = [tool, router, regForm]
+    methods = {
+      submit() {
+        let data = {
+          houseCardNumber: this.houseCardNumber, // 房产证号
+          villageName: this.villageName, // 小区名
+          acreageArea: this.acreageArea, // 房子面积
+          agoLoan: this.agoLoan, // 原贷余额
+          housePrice: this.housePrice, // 售房价格
+          applyMoney: this.applyMoney, // 申请用款
+          borrowTime: this.borrowTime, // 借款期限
+          borrowName: this.borrowName, // 借款人
+          tel: this.tel // 联系电话
+        }
+        let tip = new Map([
+           ['tel', [ '请输入正确手机号', '电话' ]],
+           ['houseCardNumber', [ '请验证表单', '非空' ]],
+           ['villageName', [ '请验证表单', '非空' ]],
+           ['acreageArea', [ '请验证表单', '非空' ]],
+           ['agoLoan', [ '请验证表单', '非空' ]],
+           ['housePrice', [ '请验证表单', '非空' ]],
+           ['applyMoney', [ '请验证表单', '非空' ]],
+           ['borrowTime', [ '请验证表单', '非空' ]],
+           ['borrowName', [ '请验证表单', '非空' ]]
+        ])
+        this._formIsTrue(data, tip).then(res => {
+          console.log('-----------^^^^^------------邓紫棋', data)
+        })
+        return data
+      }
+    }
+    onLoad() {}
+  }
+</script>

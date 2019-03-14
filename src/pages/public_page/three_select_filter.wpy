@@ -1,0 +1,84 @@
+<style lang='scss' scoped>
+@import '../../scss/common';
+.three-select-filter-index{
+   width: 100%;
+   height: 100%;
+   overflow-x: hidden;
+   background-color: $bgColor;
+   padding-bottom: 200rpx;
+   box-sizing: border-box;
+}
+// 
+.index{
+
+  .head-value{
+    width: 100%;
+    background: $mainColorRgba;
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 30rpx;
+    padding-right: 30rpx;
+    padding-bottom: 20rpx;
+    box-sizing: border-box;
+    .value-item{
+      width: 23%;
+      height: 60rpx;
+      background: #fff;
+      color: $mainColor;
+      font-size: 28rpx;
+      text-align: center;
+      line-height: 60rpx;
+      margin-right: 2%;
+      margin-top: 20rpx;
+      border-radius: 10rpx;
+      overflow: hidden;
+    }
+  }
+  .main{}
+}
+</style>
+
+<template>
+  <view class='three-select-filter-index'>
+      <view class="index">
+        <view class="head-value">
+            <view class="value-item"  wx:for="{{currentData}}" wx:key="{{index}}">{{item.name}}</view>
+        </view>
+        <view class="main">
+            <ThreeFilter @selectValue.user="selectValue"></ThreeFilter>
+        </view>
+      </view>
+      <FixButton text="确定" @submit.user="search"></FixButton>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import tool from '@/mixins/tool'
+  import router from '@/mixins/router'
+  import ThreeFilter from '@/components/loan_comm/three_filter'
+  import FixButton from '@/components/public_components/p_button' // 底部按钮
+  export default class ThreeSelectFilter extends wepy.page {
+    config = {
+      navigationBarTitleText: '筛选'
+    }
+    components = {
+      ThreeFilter,
+      FixButton
+    }
+    data = {
+      currentData: []
+    }
+    mixins = [tool, router]
+    methods = {
+      selectValue(res) { // 获取子组件的值
+        this.currentData = res
+      },
+      // 搜索
+      search() {
+        console.log('-----------^^^^^------------邓紫棋')
+        this._backRouter()
+      }
+    }
+    onLoad() {}
+  }
+</script>
